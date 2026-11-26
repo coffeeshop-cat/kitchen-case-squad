@@ -1,0 +1,650 @@
+<!DOCTYPE html> <html lang="zh-CN" site="china"> <head> <meta name="referrer" content="no-referrer-when-downgrade" /> <link rel="canonical" data-link-type="uri" href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0106.html" /> <link rel="alternate" type="text/markdown" data-link-type="markdown" href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0106.md" /> <link rel="alternate" type="text/plain" data-link-type="llms-txt" href="/agentarts/llms.txt" /> <title>创建并配置多智能体应用_开发多智能体应用_低代码开发智能体_智果（AgentArts）智能体平台-华为云</title> <meta name="keywords" content="创建并配置多智能体应用,开发多智能体应用,低代码开发" /> <meta name="description" content="多智能体应用根据用户意图，将请求路由分发至对应的子工作流或子智能体执行，实现多场景的统一调度。多智能体应用的更多介绍请参考多智能体应用介绍。本节介绍配置多智能体应用的流程。不同套餐包允许创建的应用数量限制不同，具体可参考计费说明。已开通AgentArts服务。已发布并部署工作流。创建多智能体的基础信息。" /> <meta charset="UTF-8" /> <meta name="applicable-device" content="pc,mobile" /> <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" /> <meta name="baidu-site-verification" content="nsMgQr28vc" /> <meta http-equiv="x-dns-prefetch-control" content="on" /> <meta name="cache" content="pep-disable-cache" /> <script
+        src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/support/resource/framework/js/special_iframe.js"></script> <meta name="templateName" content="doc-common-detail-pep2.0-module" /> <meta name="referrer" content="no-referrer-when-downgrade" /> <meta name="pep-template-version" content="1.9.27" /> <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests;" /> <link rel="icon" href="https://www.huaweicloud.com/favicon.ico"> <link rel="stylesheet" href="https://portal.hc-cdn.com/cnpm-global-resources/1.2.21/css/global.min.css?sttl=3.0.87&ttr=1.2.21" crossorigin="anonymous"/> <!--/* header css */--> <link rel="stylesheet" href="https://portal.hc-cdn.com/cpage-pep-header-and-footer-china/2.0.61/index.css?sttl=3.0.87&ttr=1.2.21" crossorigin="anonymous"> <style> @media(max-width:768px) { #header { display: none; } } #footer .footer-nav { display: none; } #footer .footer-copyright-container { display: none; } .footer-service .footer-wrapper { display: none; } </style> <link rel="stylesheet" href="https://portal.hc-cdn.com/cnpm-baseui/3.0.18/theme-token.css"> <script src="https://portal.hc-cdn.com/cnpm-global-resources/1.1.16/js/jquery.min.js" crossorigin="anonymous"></script> <script src="https://portal.hc-cdn.com/cnpm-global-resources/1.2.21/js/libs.min.js"></script> <script src="https://portal.hc-cdn.com/cnpm-global-resources/1.2.21/js/globalInfo.min.js" crossorigin="anonymous"></script> <!-- --> <meta name="google-site-verification" content="wQwSWDVSYQzH1niLqcUE15XH1_j_rN1T9-mbq2r6Dmw" /> <meta name="sogou_site_verification" content="u4x6sJNooE" /> <link rel="dns-prefetch" href="https://res-static.hc-cdn.cn" /> <link rel="dns-prefetch" href="https://portal.hc-cdn.com" /> <link rel="dns-prefetch" href="https://support.huaweicloud.com" /> <link rel="dns-prefetch" href="https://activity.huaweicloud.com" /> <link rel="dns-prefetch" href="https://portal.huaweicloud.com" /> <link rel="dns-prefetch" href="https://uba.huaweicloud.com" /> <link rel="dns-prefetch" href="https://uba-intl.huaweicloud.com" /> <!-- --> <script>
+    window.dataLayer = window.dataLayer || [];
+    window.$closeBiReport2018 = true
+
+    window.$siteInfo = window.$siteInfo || {};
+    window.$siteInfo.site = "china";
+    window.$siteInfo.lang = "zh-cn".replace("_", "-");
+</script> <script>window.$cssList = [];window.$aioList = [];window.$aioCdnPrefix = 'https://res.hc-cdn.com/';</script> <script src="https://res.hc-cdn.com/cnpm-portal-utils/1.4.33/PortalUtils.umd.js"></script> <script type="importmap">
+        {
+         "imports": {
+           "svelte": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/index.js",
+           "svelte/store": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/store.js",
+           "svelte/motion": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/motion.js",
+           "svelte/transition": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/transition.js",
+           "svelte/animate": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/animate.js",
+           "svelte/easing": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/easing.js",
+           "svelte/events": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/events.js",
+           "svelte/internal/client": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/internal-client.js",
+           "svelte/legacy": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/legacy.js",
+           "svelte/reactivity": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/reactivity.js",
+           "svelte/reactivity/window": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/reactivity-window.js",
+           "svelte/attachments": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/attachments.js",
+           "svelte/internal/disclose-version": "https://res.hc-cdn.com/pep-components-svelte/5.38.10/svelte-cdn/internal-disclose-version.js"
+          }
+        }
+      </script> <script>
+        window.gConfig =  window.gConfig || {};
+        window.gConfig.isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
+        var hClassName ;
+        if(window.gConfig.isMobile) {
+          hClassName = ' phone';
+        } else {
+          hClassName = ' pc';
+        }
+        if(window.$cssList) {
+          for(var i=0; i<window.$cssList.length; i++) {
+            document.write('<link rel="stylesheet" href="'+window.$cssList[i]+'/'+(window.gConfig.isMobile?'m':'pc')+'/index.css" />');
+          }
+        }
+        var root = document.documentElement;
+        root.className += hClassName ;
+    </script> <script>
+    window.gConfig =  window.gConfig || {};
+    window.gConfig.isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
+    var hClassName;
+    if(window.gConfig.isMobile){
+        hClassName = ' phone';
+    }else{
+        hClassName = ' pc';  
+    }
+    if(window.$aioList) {
+        for(var i=0; i<window.$aioList.length; i++) {
+            if(window.$aioCdnPrefix){
+                if(window.$aioList[i].length>0) {
+                    document.write('<link rel="stylesheet" href="'+window.$aioCdnPrefix+window.$aioList[i]+'/'+(window.gConfig.isMobile?'m':'pc')+'/index.css" />');
+                }
+            } else {
+                if(window.$aioList[i].length>0) {
+                    document.write('<link rel="stylesheet" href="https://res.hc-cdn.com/'+window.$aioList[i]+'/'+(window.gConfig.isMobile?'m':'pc')+'/index.css" />');
+                }
+            }
+            
+        }
+    }
+    var root = document.documentElement;
+    root.className += hClassName ; 
+    window.gConfig.seed = window.gConfig.seed || [];
+    window.gConfig.seed.push({
+        name: '@cloud/link-to',
+        data: {
+            "packages": {
+                "@cloud/link-to": {
+                    "path": "//portal.hc-cdn.com/cnpm-link-to/3.1.12/",
+                    "version": "3.1.12"
+                }
+            }
+        }
+    });
+</script> <link href="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/zh-cn/support/resource/framework/v3/css/index_revision.css?20240716&sttl=3.0.87" rel="stylesheet" /> <link href="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/zh-cn/support/resource/framework/v3/css/default.min.css" rel="stylesheet" /> <script>
+        // 规避资料不规范出现这些未定义的方法
+        function image_size() { }
+        function highlightSearch() { }
+        function initImageViewer(Selector) { }
+    </script> </head> <body class="scrolled"> <div id="header" bi_parent_name="navigation" meta-data-adjust-app="hide"> <div class="header-container"> <div class="header-prompt"> <div class="header-prompt-wrapper"> <div class="header-prompt-content"> <i class="por-icon por-icon-error"></i> <p>检测到您已登录华为云国际站账号，为了您更好的体验，建议您访问国际站服务网站 <a href="https://www.huaweicloud.com/intl/zh-cn">https://www.huaweicloud.com/intl/zh-cn</a></p> </div> <div class="header-prompt-radio"> <i class="header-prompt-checkbox active"></i> <p>不再显示此消息</p> <i class="header-prompt-closed por-icon por-icon-close"></i> </div> </div></div> <div class="header-topnav"> <div class="header-topnav-wrapper"> <li class="header-lang "> <div class="header-lang-current"><i class="header-icon-earth"></i><span class="header-lang-label">中国站</span><i class="header-icon-arrow-down"></i></div> <div class="header-lang-list"> <div class="header-site" bi_parent_name="中国站"> <div class="header-site-left">中国站</div> <ul class="header-site-right "> <li class="header-lang-item active"><a href="//www.huaweicloud.com/">简体中文</a></li> </ul> </div> <div class="header-site" bi_parent_name="International"> <div class="header-site-left">International</div> <ul class="header-site-right"> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/en-us/">English</a></li> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/id-id/">Bahasa Indonesia</a></li> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/es-us/">Español</a></li> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/pt-br/">Português</a></li> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/tr-tr/">Türkçe</a></li> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/ar-mena/">عربي</a></li> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/th-th/">ไทย</a></li> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/zh-cn/">简体中文</a></li> <li class="header-lang-item"><a href="https://www.huaweicloud.com/intl/ja-jp/">日本語</a></li> </ul> </div> <div class="header-site" bi_parent_name="Europe"> <div class="header-site-left">Europe</div> <ul class="header-site-right "> <li class="header-lang-item"><a href="//www.huaweicloud.com/eu/">English</a></li> <li class="header-lang-item"><a href="//www.huaweicloud.com/eu/de-de/">Deutsch</a></li> <li class="header-lang-item"><a href="//www.huaweicloud.com/eu/es-es/">Español</a></li> <li class="header-lang-item"><a href="//www.huaweicloud.com/eu/fr-fr/">Français</a></li> <li class="header-lang-item"><a href="//www.huaweicloud.com/eu/nl-nl/">Nederlands</a></li> </ul> </div> </div> </li> <li class="header-hwapp"> <i class="header-icon-hwapp"></i><a class="header-hwapp-link" href="https://www.huaweicloud.com/mobile_app/hwapp.html?channel=navigation_right" target="_black">华为云App</a> </li> </div></div> <div class="header-wrapper"> <div class="header-bottom"> <div class="header-bottom-wrapper "> <a class="header-logo" bi_name="logo" href="https://www.huaweicloud.com"> <img src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/wangxue/header/logo.svg"> </a> <div class="header-nav"> <div class="header-nav-scroll"> <ul class="header-nav-list"> <li data-key="agentorchard"> <a data-href="https://agentorchard.huaweicloud.com/index.html"> <span>智果园</span> </a> </li> <li data-key="activity"> <a> <span>活动</span> </a> </li> <li data-key="product"> <a data-href="https://www.huaweicloud.com/product/"> <span>产品</span> </a> </li> <li data-key="solution"> <a data-href="https://www.huaweicloud.com/solution/"> <span>解决方案</span> </a> </li> <li data-key="price"> <a data-href="https://www.huaweicloud.com/pricing/index.html"> <span>定价</span> </a> </li> <li data-key="market"> <a data-href="https://marketplace.huaweicloud.com/"> <span>云商店</span> </a> </li> <li data-key="partner"> <a data-href="https://www.huaweicloud.com/partners/"> <span>伙伴</span> </a> </li> <li data-key="developer"> <a data-href="https://developer.huaweicloud.com/"> <span>开发者</span> </a> </li> <li data-key="support"> <a data-href="https://www.huaweicloud.com/service/"> <span>服务</span> </a> </li> <li data-key="about"> <a data-href="https://www.huaweicloud.com/about/index.html"> <span>了解华为云</span> </a> </li> </ul> </div> <div class="header-bottom-mask"></div> <div class="header-nav-hover-line"></div> </div> <div class="header-tools"> <div class="header-search J-header-search" bi_parent_name="search"> <form class="header-search-inner J-serach-form" tabindex="-1" data-api-search-url="https://www.huaweicloud.com/s/" data-api-report="https://portal.huaweicloud.com/stats/pip.gif" data-api-hot="https://portal.huaweicloud.com/rest/cbc/portalsearchcorrectorservice/v1/hot-words?appId=com.huaweicloud.portal.search.high&amp;type=PC" data-use-quick-link="true" data-quick-link-icon="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/advertisement/Fixed/banner/ic_public_link.svg" data-api-autoword="https://portal.huaweicloud.com/rest/cbc/portalsearchcorrectorservice/v1/search" data-default-hot="网站和Web应用程序,镜像制作,弹性势能,容器化改造,大数据分析人"> <div class="header-search-content J-search-content"> <div class="header-search-input"> <textarea class="J-search-input" id="header-navigation-search-input" rows="1" maxlength="256" data-active-placeholder="输入您想要搜索的关键词" autocomplete="off"></textarea> <div class="header-search-footer"> <button type="button" class="header-search-send" bi_name="#header-navigation-search-input"></button> </div> </div> <div class="header-search-droplist J-search-drop J-search-autoword" data-clickable-asyn="true"> <div class="J-search-hot"> <div class="J-search-history" bi_parent_name="history"> <div class="J-search-title"><span>清空</span>最近搜索</div> <div class="J-search-history-content"> </div> </div> <div class="J-search-popular" bi_parent_name="recommend"> <div class="J-search-title">快速链接</div> <ul class="J-search-popular-content"> <li><a>云耀云服务器L实例</a></li> <li><a>免费试用</a></li> <li><a>云服务器</a></li> <li><a>域名</a></li> <li><a>云速建站</a></li> </ul> </div> </div> <div class="J-search-related"> <ul></ul> </div> <div class="J-search-assist"> <div class="J-search-assist-keyword" bi_name="openpangu" data-assist-text="问一问云宝助手“$$”"><i class="J-search-assist-icon" style="background-image: url('https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/commons/icon-yunbao.png');"></i><a><p>使用云宝助手，探索更多专业内容</p><i class="header-icon-arrow-right"></i></a></div> </div> </div> </div> </form> <div class="header-search-button"> <input class="search-default" type="text" data-active-placeholder="搜索" autocomplete="off" placeholder="搜索"> <i></i> <div class="header-search-carousel"> <ul></ul> </div> </div> </div> <div class="header-menu-search-mb"> <span class="header-icon-search"></span> </div> <ul class="header-tools-right header-main"> <li class="header-tools-icon"> <a href="https://www.huaweicloud.com/service/contact.html" title="联系我们" bi_name="tools_icon_联系我们"> <i class="header-tools-icon-default" style="background-image:url('https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/yunying/header-2025/%E8%81%94%E7%B3%BB%E6%88%91%E4%BB%AC.svg')"></i> <i class="header-tools-icon-hover" style="background-image:url('https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/yunying/header-2025/%E8%81%94%E7%B3%BB%E6%88%91%E4%BB%AC.svg')"></i> </a> <div class="header-tools-list"> <ul> <li> <div class="header-tools-list-category-title">售前咨询</div> <div class="tool-item"> <i class="header-tools-list-icon" style="background-image:url('https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/yunying/header-2025/电话.svg')"></i> <div> <div class="header-tools-list-title"><p>950808 转 1</p></div> </div> </div> </li> <li> <div class="tool-item"> <i class="header-tools-list-icon" style="background-image:url('https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/yunying/header-2025/预约咨询.svg')"></i> <div> <div class="header-tools-list-title"><p><a href="https://www.huaweicloud.com/consultation/" rel="noopener noreferrer" target="_blank" class="por-link">预约咨询</a></p></div> </div> </div> </li> <li> <div class="header-tools-list-category-title">售后服务</div> <div class="tool-item"> <i class="header-tools-list-icon" style="background-image:url('https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/yunying/header-2025/工单.svg')"></i> <div> <div class="header-tools-list-title"><p><a href="https://console.huaweicloud.com/ticket/?locale=zh-cn#/ticketindex/createIndex" rel="noopener noreferrer" target="_blank" class="por-link">工单提交</a></p></div> </div> </div> </li> <li> <div class="header-tools-list-category-title">建议反馈</div> <div class="tool-item"> <i class="header-tools-list-icon" style="background-image:url('https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/yunying/header-2025/建议反馈.svg')"></i> <div> <div class="header-tools-list-title"><p><a href="https://bbs.huaweicloud.com/suggestion" rel="noopener noreferrer" target="_blank" class="por-link">我有建议</a></p></div> </div> </div> </li> </ul> </div></li> <li><a href="https://support.huaweicloud.com">文档</a></li> <li><a href="https://beian.huaweicloud.com">备案</a></li> <li><a href="https://console.huaweicloud.com?locale=zh-cn">控制台</a></li> <li class="header-login-mobile"> <span class="header-icon-user js-login"></span> <div class="header-user-info user-info-layer user-unlogin header-backdrop"> <ul class="header-user-info-list account-nav"> <li class="header-user-info-item-account account-item"> <a href="//account.huaweicloud.com/usercenter/?locale=zh-cn&amp;region=cn-north-4#/accountindex/accountInfo" bi_name="账号中心" target="_blank">账号中心</a> </li> <li class="header-user-info-item-account account-item"> <a href="//account.huaweicloud.com/usercenter/?locale=zh-cn#/userindex/allview" bi_name="费用与成本" target="_blank">费用与成本</a> </li> <li class="header-user-info-split"></li> <li class="order1"><a href="//account.huaweicloud.com/usercenter/?locale=zh-cn#/ordercenter/userindex/unpaidOrder" bi_name="待支付订单" target="_blank">待支付订单</a></li> <li class="management1"><a href="//account.huaweicloud.com/usercenter/?locale=zh-cn#/userindex/renewalManagement" bi_name="待续费产品" target="_blank">待续费产品</a></li> <li class="message "><a href="//console.huaweicloud.com/mc/?locale=zh-cn" bi_name="未读消息" target="_blank">未读消息</a></li> <li class="header-user-info-split"></li> <li><a href="//console.huaweicloud.com/ticket/?region=cn-north-1&amp;locale=zh-cn#/ticketindex/createIndex" bi_name="工单管理" target="_blank">工单管理</a></li> <li><a class="mb-special" href="//www.huaweicloud.com/mobile_app/api_page/appv2/app_download.html?channel=mobile_console" rel="nofollow" bi_name="管理控制台" target="_blank">管理控制台</a></li> <li class="header-user-info-split"></li> <li class="header-user-info-item-account account-item button-container"> <a class="header-user-info-button-red" href="https://reg.huaweicloud.com/registerui/public/custom/register.html?locale=zh-cn&amp;service=https%3A%2F%2Faccount.huaweicloud.com%2Fusercenter%2F%3Flocale%3Dzh-cn%26cloud_route_state%3D%2Fuserindex%2FaccountInfo#/register" target="_blank">注册</a> <a class="header-user-info-button-common" href="//auth.huaweicloud.com/authui/login?locale=zh-cn&amp;service=" target="_blank">登录</a> </li> </ul> </div></li><li class="header-login"><a data-login-href="//auth.huaweicloud.com/authui/login?locale=zh-cn&amp;service=" href="//auth.huaweicloud.com/authui/login?locale=zh-cn&amp;service=" class="btn js-login">登录</a></li> <li class="header-register"><a href="https://reg.huaweicloud.com/registerui/public/custom/register.html?locale=zh-cn#/register" class="btn js-register"> 注册 </a></li> <li style="display:none" class="header-shopping-cart" data-api-canuse="https://portal.huaweicloud.com/rest/cbc/cbcshoppingcartservice/v1/shopping-cart/can-use-shopping-cart" data-api-summary="https://portal.huaweicloud.com/rest/cbc/cbcshoppingcartservice/v1/shopping-cart/summary"> <a class="shopping-cart-icon" target="_blank" data-login="//auth.huaweicloud.com/authui/login?locale=zh-cn&amp;service=https://account.huaweicloud.com/usercenter/%23%2Fordercenter/cart" data-shopping-cart="https://account.huaweicloud.com/usercenter/#/ordercenter/cart" href="//auth.huaweicloud.com/authui/login?locale=zh-cn&amp;service=https://account.huaweicloud.com/usercenter/%23%2Fordercenter/cart"> <span></span> <img src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/header-and-footer/shopping-cart.png"> </a> <a class="shopping-cart-text btn js-shopping-cart" target="_blank" data-login="//auth.huaweicloud.com/authui/login?locale=zh-cn&amp;service=https://account.huaweicloud.com/usercenter/%23%2Fordercenter/cart" data-shopping-cart="https://account.huaweicloud.com/usercenter/#/ordercenter/cart" href="//auth.huaweicloud.com/authui/login?locale=zh-cn&amp;service=https://account.huaweicloud.com/usercenter/%23%2Fordercenter/cart"> 购物车 </a></li><li class="header-user user-info"> <div class="header-user-avator"> <img class="header-tool-user-avator-img account-pic lazyload" data-src="//res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/web_resoure/cms/static/v2_resources/images/global/headPic.png?sttl=20180413"> </div> <div class="header-user-name"><span class="my-acct">admin</span><i class="header-nav-item-icon"></i></div> <div class="header-user-info user-info-layer header-backdrop"> <ul class="header-user-info-list account-nav"> <li class="header-user-info-item-account account-item"> <a href="//account.huaweicloud.com/usercenter/#/accountindex/accountInfo" bi_name="账号中心" target="_blank">账号中心</a> <a class="account-verification header-verification" href="//account.huaweicloud.com/usercenter/?locale=zh-cn#/accountindex/realNameAuth" target="_blank"> <i class="header-icon header-icon-verification"></i> <i class="header-icon header-icon-verification-on"></i> <p class="state-unactive">未实名认证</p> <p class="state-active">已实名认证</p> </a> </li> <li><a href="//account.huaweicloud.com/usercenter/?locale=zh-cn#/userindex/allview" bi_name="费用与成本" target="_blank">费用与成本</a></li> <li class="header-user-info-split"></li> <li class="order"><a href="//account.huaweicloud.com/usercenter/?locale=zh-cn#/ordercenter/userindex/unpaidOrder" bi_name="待支付订单" target="_blank">待支付订单<span>0</span></a></li> <li class="management"><a href="//account.huaweicloud.com/usercenter/?locale=zh-cn#/userindex/renewalManagement" bi_name="待续费产品" target="_blank">待续费产品<span>0</span></a></li> <li class="message"><a href="//console.huaweicloud.com/mc/?locale=zh-cn" bi_name="未读消息" target="_blank">未读消息<span>0</span></a></li> <li class="header-user-info-split"></li> <li class="isVendor" style="display:none;"><a href="https://partner.huaweicloud.com/partnercenter" bi_name="伙伴中心" target="_blank">伙伴中心</a></li> <li><a href="//console.huaweicloud.com/marketplace/tenant/#/market/order/purchasedProductsCN" bi_name="云商店买家中心" target="_blank">云商店买家中心</a></li> <li class="isIsv" style="display:none;"><a href="//console.huaweicloud.com/marketplace/isv/#/console/overview" bi_name="云商店卖家中心" target="_blank">云商店卖家中心</a></li> <li class="header-user-info-split"></li> <li><a href="https://console.huaweicloud.com/ticket/?locale=zh-cn#/ticketindex/customerService" bi_name="实时客服" target="_blank">实时客服</a></li> <li class="header-user-info-split"></li> <li><a href="https://console.huaweicloud.com/ticket/#/ticketindex/createIndex" bi_name="工单管理" target="_blank">工单管理</a></li> <li class="header-user-info-split pc-only"></li> <li><a href="https://devstation.developer.huaweicloud.com/aidevspace" bi_name="开发者空间" target="_blank" class="pc-special">开发者空间</a></li> <li class="header-user-info-split"></li> <li><a href="https://www.huaweicloud.com/declaration/labels_config.html" bi_name="个性化推荐管理" target="_blank">个性化推荐管理</a></li> <li><a href="//www.huaweicloud.com/mobile_app/api_page/appv2/app_download.html?channel=mobile_console" bi_name="管理控制台" target="_blank" class="mb-special">管理控制台</a></li> <li class="header-user-info-split"></li> <li class="logout"> <a href="#" class="bottom-username"><span class="my-acct">admin</span></a> <a class="logout-btn" mate_data_ts="www_v2_top_navigation.click.logout" href="//portal.huaweicloud.com/index/logout">退出登录</a> </li> </ul> </div></li> </ul> <div class="header-menu-mb" bi_name="HamburgNavigation" data-clickable="true"> <span></span> <span></span> <span></span> </div></div> </div></div> <script type="text/html" id="holder-drop"></script> <script type="text/html" id="holder-mbnav"></script> <div class="header-mbshearch header-backdrop" bi_parent_name="search_mb"> <div class="header-mbshearch-innner"> <form class="header-mbshearch-form" action method="get" data-api-search-url="https://www.huaweicloud.com/s/" data-api-report="https://portal.huaweicloud.com/stats/pip.gif" data-api-hot="https://portal.huaweicloud.com/rest/cbc/portalsearchcorrectorservice/v1/hot-words?appId=com.huaweicloud.portal.search.high&amp;type=PC" data-api-autoword="https://portal.huaweicloud.com/rest/cbc/portalsearchcorrectorservice/v1/search" data-default-hot="网站和Web应用程序,镜像制作,弹性势能,容器化改造,大数据分析人"> <div class="header-mbshearch-form-row"> <div> <div class="header-mbshearch-input-box"> <i class=""></i> <input type="text" maxlength="128" class="header-mbshearch-input" autocomplete="off"> <div class="header-search-carousel"> <ul></ul> </div> </div> </div> <div><a class="header-mbshearch-cancel">取消</a></div> </div> </form> <div class="header-mbshearch-droplist" data-clickable-asyn="true"> <div class="J-mbshearch-hot"> <div class="J-mbshearch-history"> <div class="J-mbshearch-title"><span>清空</span>最近搜索</div> <div class="J-mbshearch-history-content"> </div> </div> <div class="J-mbshearch-popular"> <div class="J-mbshearch-title">快速链接</div> <ul class="J-mbshearch-popular-content"> <li><a>云耀云服务器L实例</a></li> <li><a>免费试用</a></li> <li><a>云服务器</a></li> <li><a>域名</a></li> <li><a>云速建站</a></li> </ul> </div> </div> <ul class="J-mbshearch-related"> </ul> </div> </div></div> </div> </div></div> <div id="content" class="help-page home-page" bi_parent_name="support"> <div bi_parent_name="china-content"> <div> <a id="support-hidden-menu" hidden href="/agentarts/v3_support_leftmenu_fragment.html"></a> <a id="support-hidden-index" hidden href="/support_all_doc_fragment.html"></a> </div> <div class="support-section support-content" id="support-content"> <div class="support-body" data-prod="agentarts" bi_parent_name="agentarts_main"> <div class="wrapper"> <div class="support-section support-nav" id="support-nav"></div> <script>
+    !(function (win, $) {
+        !(function initAllDoc() {
+            const origin = window.location.origin;
+            const url = `${origin}/support_all_doc_fragment.html`;
+            $.ajax({
+                type: 'get',
+                url: url,
+                timeout: 10000,
+                success: function (data) {
+                    initBase(data);
+                },
+            });
+        })();
+
+        function initBase(allDoc) {
+            let url = '';
+            let code = 'agentarts' || '';
+            const origin = window.location.origin;
+
+            if (code === 'pcre' && queryString('product')) {
+                code = queryString('product');
+            }
+            if (code) {
+                url = `${origin}/${code}/v3_support_leftmenu_fragment.html`;
+            }
+            $.ajax({
+                type: 'get',
+                url: url,
+                timeout: 10000,
+                success: function (data) {
+                    initCommon(data, allDoc, code);
+                },
+            });
+        }
+
+        function queryString(key) {
+            var url = window.location.href;
+            var val = url.match(new RegExp('[?&]' + key + '=([^&#]*)(&?)', 'i'));
+            return val ? val[1] : val;
+        }
+
+        function initCommon(data, allDoc, code) {
+            var peplang = $('html').attr('lang').toLowerCase();
+            var scripts = [
+                "https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/support/resource/framework/js/common_revision.min.js?20240716&sttl=3.0.87",
+                "https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/support/resource/framework/js/maintainable_revision.min.js?20240716&sttl=3.0.87"
+            ];
+            $(data).find('ul.help-tsr li.nav-item').eq(1).find('a').attr('target', '_blank').removeClass('ajax-nav');
+            $('#support-nav').html($(data));
+            $('#support-nav').find('.side-nav-menu .side-menu-box').html($(allDoc));
+            if (peplang === 'es-us' || peplang === 'pt-br' || peplang === 'ja-jp') {
+                $('#support-nav .side-nav').find('.nav-item.level1').each((_index, item) => {
+                    if ($(item).attr('data-append') === 'false' && $(item).next().attr('data-append') === 'true') {
+                        $(item).after(`<li class="nav-item level1 append-tip"><a style="padding: 0;font-size: 12px;overflow: visible;max-height: initial;-webkit-line-clamp: initial;">以下内容暂无该语言版本，请查阅英文版本。</a></li>`);
+                    }
+                    if ($(item).attr('data-append') === 'true') {
+                        $(item).find('a').attr('target', '_blank');
+                    }
+                })
+            };
+            for(var i = 0; i < scripts.length; i++) {
+                var script = document.createElement('script');
+                script.type = 'text/javaScript';
+                script.setAttribute('crossorigin','anonymous');
+                script.src = scripts[i];
+                document.getElementsByTagName('body')[0].appendChild(script);
+            };
+        }
+        !(function () {
+            var sWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            if (sWidth >= 768) {
+                $('.side-menu-box .item.item-search-mb').remove();
+            } else {
+                $('.side-menu-box .item.item-search-pc').remove();
+            }
+        })();
+    })(window, jQuery);
+</script> <div class="support-main" data-handbook-type="lowcode-agentarts"> <span class="move-line"></span> <div class="crumbs"> <a class="link help-link" href="/index.html" mate_data_ts_v2="zh-cn_support_detail_agentarts_breadcrumb.click_文档首页">文档首页</a><span>&#47;</span> <a class="link help-link" href="https://support.huaweicloud.com/agentarts/index.html" mate_data_ts_v2="zh-cn_support_detail_agentarts_breadcrumb.click_智果（AgentArts）智能体平台">智果（AgentArts）智能体平台</a><span>&#47;</span> <a class="link help-link" href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0001.html" mate_data_ts_v2="zh-cn_support_detail_agentarts_breadcrumb.click_低代码开发智能体">低代码开发智能体</a><span>&#47;</span> <a class="link help-link" href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0102.html" mate_data_ts_v2="zh-cn_support_detail_agentarts_breadcrumb.click_开发多智能体应用">开发多智能体应用</a><span>&#47;</span> <span class="text">创建并配置多智能体应用</span> </div> <div class="help-content help-center-document cf" data-current-handbookcode="lowcode-agentarts" data-handbook-type="lowcode-agentarts" > <div id="adOutsideDiv"><div id="helpAdDiv"></div></div> <div class="updateTime"> 更新时间：<span class="updateInfo">2026-11-02 GMT+08:00</span> <div class="doc-tips"> </div> </div> <div class="help-view-pdf" mate_data_ts_v2="zh-cn_support_detail_agentarts.click_查看PDF"> <a target="_blank" href="https://support.huaweicloud.com/lowcode-agentarts/AgentArts-低代码开发-pdf.pdf"><i></i><span>查看PDF</span></a> </div> <div class="help-view-share"> <a href="javascript:void(0);"><i></i><span>分享</span></a> <div class="share-content"> <ul class="share-list"> <li class="share-item share-weibo" mate_data_ts_v2="zh-cn_support_detail_agentarts.click_微博"> <a href="javascript:void(0);"><i></i><span>微博</span></a> <div class="share-result"> <p>分享文档到微博</p> </div> </li> <li class="share-item share-wechat" mate_data_ts_v2="zh-cn_support_detail_agentarts.click_微信"> <a href="javascript:void(0);"><i></i><span>微信</span></a> <div class="share-result"> <div id="qrcode"></div> </div> </li> <li class="share-item share-copy" mate_data_ts_v2="zh-cn_support_detail_agentarts.click_复制链接"> <a href="javascript:void(0);"><i></i><span data-copy-text="复制链接" data-copied-text="复制成功">复制链接</span></a> <div class="share-result"> <p>复制链接到剪贴板</p> </div> </li> </ul> </div> </div> <div class="share-item share-copy-fixed"> <i class="copy-success"></i> <p>链接复制成功！</p> <span class="copy-close"></span> </div> <a name="agentarts_05_0106"></a><a name="agentarts_05_0106"></a> <div class="articleBoxWithoutHead"> <h1 class="topicTitle-h1">创建并配置多智能体应用</h1> <div id="body0000002443561725"> <p id="agentarts_05_0106__p177101210162311">多智能体应用根据用户意图，将请求路由分发至对应的子工作流或子智能体执行，实现多场景的统一调度。多智能体应用的更多介绍请参考<a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0103.html">多智能体应用介绍</a>。</p> <p id="agentarts_05_0106__p8060118">本节介绍配置多智能体应用的流程。</p> <div class="section" id="agentarts_05_0106__section28932328353"> <h4 class="sectiontitle">费用说明</h4> <p id="agentarts_05_0106__p132851722174316">不同套餐包允许创建的<strong id="agentarts_05_0106__b122729228379">应用数量限制</strong>不同，具体可参考<a href="https://support.huaweicloud.com/price-agentarts/agentarts_08_0002.html" target="_blank" rel="noopener noreferrer">计费说明</a>。</p> </div> <div class="section" id="agentarts_05_0106__section3390416164812"> <h4 class="sectiontitle">前提条件</h4> <ul id="agentarts_05_0106__ul1171222965717"> <li id="agentarts_05_0106__li1071213294571">已<a href="https://support.huaweicloud.com/qs-agentarts/agentarts_04_0000.html" target="_blank" rel="noopener noreferrer">开通AgentArts服务</a>。</li> <li id="agentarts_05_0106__li10712152975716">已<a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0053.html">发布并部署工作流</a>。</li> </ul> </div> <div class="section" id="agentarts_05_0106__section910619711181"> <h4 class="sectiontitle">创建多智能体应用</h4> <p id="agentarts_05_0106__p9552633306">创建多智能体的基础信息。</p> <ol id="agentarts_05_0106__ol1493625872617"> <li id="agentarts_05_0106__li1293618585269"><span id="agentarts_05_0106__">登录<a href="https://console.huaweicloud.com/agentarts/#/home/overview" target="_blank" rel="noopener noreferrer">AgentArts智能体平台</a>。</span></li> <li id="agentarts_05_0106__li14936195811267"><span id="agentarts_05_0106__">在左侧导航栏，选择“开发中心 &gt; 智能体管理”。</span></li> <li id="agentarts_05_0106__li793614581268"><span id="agentarts_05_0106__">选择“多智能体”页签，单击<span class="uicontrol" id="agentarts_05_0106__uicontrol13936105815261">“创建多智能体”</span>。</span></li> <li id="agentarts_05_0106__li393617582263"><span id="agentarts_05_0106__">在“创建多智能体”页面，配置基础信息，具体参数说明请参考<a href="#agentarts_05_0106__table1893614583262">表1</a>。</span> <p></p> <div class="fignone" id="agentarts_05_0106__fig293618585264"> <span class="figcap"><b>图1 </b>创建多智能体</span> <br> <span><img id="agentarts_05_0106__image1393605817261" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625590961.png" title="点击放大" class="imgResize"></span> </div> <div class="tableBorder"> <a name="agentarts_05_0106__table1893614583262"></a><a name="table1893614583262"></a> <table cellpadding="4" cellspacing="0" summary="" id="agentarts_05_0106__table1893614583262" frame="border" border="1" rules="all"> <caption> <b>表1 </b>基础信息参数说明 </caption> <thead align="left"> <tr id="agentarts_05_0106__row1993635817262"> <th align="left" class="cellrowborder" valign="top" width="20%" id="mcps1.3.5.3.4.2.2.2.4.1.1" liselected="liSelected"> <p id="agentarts_05_0106__p9936358152611">参数</p> </th> <th align="left" class="cellrowborder" valign="top" width="60%" id="mcps1.3.5.3.4.2.2.2.4.1.2" liselected="liSelected"> <p id="agentarts_05_0106__p18936105815260">说明</p> </th> <th align="left" class="cellrowborder" valign="top" width="20%" id="mcps1.3.5.3.4.2.2.2.4.1.3" liselected="liSelected"> <p id="agentarts_05_0106__p16936858102614">示例</p> </th> </tr> </thead> <tbody> <tr id="agentarts_05_0106__row9937125818260"> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.5.3.4.2.2.2.4.1.1 "> <p id="agentarts_05_0106__p2937115813263">名称</p> </td> <td class="cellrowborder" valign="top" width="60%" headers="mcps1.3.5.3.4.2.2.2.4.1.2 "> <p id="agentarts_05_0106__p17937165810269">多智能体应用的名称。由2~64个字符组成，包含中英文、数字、下划线、中划线、空格，不能以空格开头或结尾。</p> </td> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.5.3.4.2.2.2.4.1.3 "> <p id="agentarts_05_0106__p14937185822615">智能外呼</p> </td> </tr> <tr id="agentarts_05_0106__row109376583265"> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.5.3.4.2.2.2.4.1.1 "> <p id="agentarts_05_0106__p18937185811269">描述</p> </td> <td class="cellrowborder" valign="top" width="60%" headers="mcps1.3.5.3.4.2.2.2.4.1.2 "> <p id="agentarts_05_0106__p1937758112610">多智能体的描述信息。由1~1024个字符组成。</p> </td> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.5.3.4.2.2.2.4.1.3 "> <p id="agentarts_05_0106__p493745852616">智能外呼</p> </td> </tr> <tr id="agentarts_05_0106__row19937958112620"> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.5.3.4.2.2.2.4.1.1 "> <p id="agentarts_05_0106__p89371058152616">多智能体图标</p> </td> <td class="cellrowborder" valign="top" width="60%" headers="mcps1.3.5.3.4.2.2.2.4.1.2 "> <p id="agentarts_05_0106__p20937158172615">系统默认多智能体应用图标，可通过单击<span><img id="agentarts_05_0106__image14937205816261" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595071630.png"></span>自动生成图标，也可以自定义图标。</p> <ol type="a" id="agentarts_05_0106__ol1293712584265"> <li id="agentarts_05_0106__li79371858182618">鼠标移动至系统默认图标上，单击鼠标左键。</li> <li id="agentarts_05_0106__li13967135832610">上传已准备好的应用图标。 <p id="agentarts_05_0106__p5968058192615"><a name="agentarts_05_0106__li13967135832610"></a><a name="li13967135832610"></a>支持jpg、jpeg、png、gif格式图片，且不大于200KB。</p></li> </ol> </td> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.5.3.4.2.2.2.4.1.3 "> <p id="agentarts_05_0106__p119683582261">系统默认图标</p> </td> </tr> </tbody> </table> </div> <p></p></li> <li id="agentarts_05_0106__li119682587269"><span id="agentarts_05_0106__">单击“立即创建”。</span> <p></p> <p id="agentarts_05_0106__p196819585260">创建后，进入“多智能体配置”页面，初始只有一个“多Agent控制器”节点。创建的多智能体应用显示在多智能体应用卡片列表中。</p> <p></p></li> </ol> </div> <div class="section" id="agentarts_05_0106__section113398464499"> <h4 class="sectiontitle">全局配置</h4> <p id="agentarts_05_0106__p45471225135210">在“多智能体配置”页面右上方，单击“全局配置”。</p> <p id="agentarts_05_0106__p96523566497">全局配置可配置输入参数和全局变量，这些都参数均可供工作流的输入参数使用。</p> <div class="caution" id="agentarts_05_0106__note1865219565493"> <span class="cautiontitle"><img src="https://support.huaweicloud.com/lowcode-agentarts/public_sys-resources/caution_3.0-zh-cn.png"> </span> <div class="cautionbody"> <p id="agentarts_05_0106__p146521256114912">输入参数的值不可修改，全局变量的值可被子工作流的输出参数覆盖，请注意区分使用场景。</p> </div> </div> <div class="fignone" id="agentarts_05_0106__fig1865295619499"> <span class="figcap"><b>图2 </b>全局配置</span> <br> <span><img id="agentarts_05_0106__image765212566498" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595231536.png"></span> </div> <div class="tableBorder"> <table cellpadding="4" cellspacing="0" summary="" id="agentarts_05_0106__table196522569491" frame="border" border="1" rules="all"> <caption> <b>表2 </b>全局配置参数说明 </caption> <thead align="left"> <tr id="agentarts_05_0106__row2652115612494"> <th align="left" class="cellrowborder" valign="top" width="25%" id="mcps1.3.6.6.2.3.1.1" liselected="liSelected"> <p id="agentarts_05_0106__p36521456134911">参数</p> </th> <th align="left" class="cellrowborder" valign="top" width="74.99999999999999%" id="mcps1.3.6.6.2.3.1.2" liselected="liSelected"> <p id="agentarts_05_0106__p1565255624912">说明</p> </th> </tr> </thead> <tbody> <tr id="agentarts_05_0106__row1165212569491"> <td class="cellrowborder" valign="top" width="25%" headers="mcps1.3.6.6.2.3.1.1 "> <p id="agentarts_05_0106__p11652135674913">输入参数</p> </td> <td class="cellrowborder" valign="top" width="74.99999999999999%" headers="mcps1.3.6.6.2.3.1.2 "> <p id="agentarts_05_0106__p96526563493">传给工作流的输入参数，且值不可修改。</p> <p id="agentarts_05_0106__p14652105620499">单击<span><img id="agentarts_05_0106__image9652155634915" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595071640.png"></span>，添加输入参数。</p> <ul id="agentarts_05_0106__ul14653195614917"> <li id="agentarts_05_0106__li865395674918">参数名称：由1~64字符组成，包含字母、数字、下划线，不能以数字开头。</li> <li id="agentarts_05_0106__li76531756194914">类型：类型支持String、Integer、Number、Boolean。默认值String。</li> <li id="agentarts_05_0106__li19653756184917">描述：由0~256个字符组成。</li> <li id="agentarts_05_0106__li8653125613491">必填：根据需求去掉勾选。默认勾选。</li> <li id="agentarts_05_0106__li6653956134913"><span><img id="agentarts_05_0106__image19653115615491" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625671133.png"></span>：删除输入参数。</li> <li id="agentarts_05_0106__li156531256144916"><span><img id="agentarts_05_0106__image16531856124913" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595231544.png"></span>：输入参数默认值。</li> </ul> </td> </tr> <tr id="agentarts_05_0106__row965311563499"> <td class="cellrowborder" valign="top" width="25%" headers="mcps1.3.6.6.2.3.1.1 "> <p id="agentarts_05_0106__p265311560492">全局变量</p> </td> <td class="cellrowborder" valign="top" width="74.99999999999999%" headers="mcps1.3.6.6.2.3.1.2 "> <p id="agentarts_05_0106__p06534564496">传给工作流的输入参数，工作流如果有相同名称和类型的输出参数会覆盖该值。</p> <p id="agentarts_05_0106__p265345619493">单击<span><img id="agentarts_05_0106__image15653195610493" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625590977.png"></span>，添加全局变量。</p> <ul id="agentarts_05_0106__ul18653056144918"> <li id="agentarts_05_0106__li126531456124911">参数名称：由1~64字符组成，包含字母、数字、下划线，不能以数字开头。</li> <li id="agentarts_05_0106__li12653956184918">类型：类型支持String、Integer、Number、Boolean。默认值String。</li> <li id="agentarts_05_0106__li186531056154917">描述：由1~256个字符组成。</li> <li id="agentarts_05_0106__li10653256114913"><span><img id="agentarts_05_0106__image176531564498" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595071648.png"></span>：删除全局变量。</li> <li id="agentarts_05_0106__li76531656124917"><span><img id="agentarts_05_0106__image13653115611496" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625671143.png"></span>：全局变量默认值。</li> </ul> </td> </tr> </tbody> </table> </div> </div> <div class="section" id="agentarts_05_0106__section1790125215524"> <h4 class="sectiontitle">配置多Agent控制器</h4> <p id="agentarts_05_0106__p785821803018">配置多智能体，实现特定业务能力。</p> <ol id="agentarts_05_0106__ol86751729145515"> <li id="agentarts_05_0106__li18408205220426"><span id="agentarts_05_0106__">单击“多Agent控制器”卡片，在弹出页面配置参数信息。</span> <p></p> <div class="fignone" id="agentarts_05_0106__fig10969858152619"> <span class="figcap"><b>图3 </b>配置多Agent控制器</span> <br> <span><img id="agentarts_05_0106__image20490104483113" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002768276164.png" title="点击放大" class="imgResize"></span> </div> <p></p></li> <li id="agentarts_05_0106__li1267552914558"><span id="agentarts_05_0106__">（可选）配置模型。</span> <p></p> <p id="agentarts_05_0106__p151493717">此处的模型用于意图识别和路由调度，负责理解用户输入的意图并决定路由到哪条工作流或智能体。</p> <div class="caution" id="agentarts_05_0106__note9514331910"> <span class="cautiontitle"><img src="https://support.huaweicloud.com/lowcode-agentarts/public_sys-resources/caution_3.0-zh-cn.png"> </span> <div class="cautionbody"> <p id="agentarts_05_0106__p13514133513">“模型配置（可选）”与“意图识别”参数，至少填写一个。如果意图识别工作流或意图包未返回有效意图，则使用选择的模型进行意图识别。</p> </div> </div> <p id="agentarts_05_0106__p65141639111">AgentArts支持在下拉框中选择合适的模型。</p> <div class="note" id="agentarts_05_0106__note4514143715"> <img src="https://support.huaweicloud.com/lowcode-agentarts/public_sys-resources/note_3.0-zh-cn.png"><span class="notetitle"> </span> <div class="notebody"> <div class="p" id="agentarts_05_0106__agentarts_05_0017_p20470153085712"> 这里可以选择的模型为： <ul id="agentarts_05_0106__agentarts_05_0017_ul152285347575"> <li id="agentarts_05_0106__agentarts_05_0017_li10228103445712"><strong id="agentarts_05_0106__agentarts_05_0017_b148004120195">“资产广场 &gt; 模型”中已开通的模型</strong>。具体请参考<a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0184.html">接入预置模型</a>。</li> <li id="agentarts_05_0106__agentarts_05_0017_li12107134375811"><strong id="agentarts_05_0106__agentarts_05_0017_b669455191910">“开发中心 &gt; 开发配置 &gt; 自定义模型”中已接入的模型</strong>。具体请参考<a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0188.html">接入自定义模型</a>。</li> <li id="agentarts_05_0106__agentarts_05_0017_li182141146105912">“<strong id="agentarts_05_0106__agentarts_05_0017_b17119121551920">托管与运行 &gt; 模型”中已添加模型代理并且认证方式为API Key认证的模型</strong>。具体请参考<a href="https://support.huaweicloud.com/highcode-agentarts/agentarts_10_107.html" target="_blank" rel="noopener noreferrer">模型</a>。</li> </ul> </div> <p id="agentarts_05_0106__agentarts_05_0017_p196161551141719">模型的标签展示顺序从左到右依次是用户自定义标签、<a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0191.html">接入模型服务</a>时的<span class="uicontrol" id="agentarts_05_0106__agentarts_05_0017_uicontrol256291615215">“选择标签”</span>、<span class="uicontrol" id="agentarts_05_0106__agentarts_05_0017_uicontrol115851320172119">“模型类型”</span>。</p> <ul id="agentarts_05_0106__agentarts_05_0017_ul2062813383181"> <li id="agentarts_05_0106__agentarts_05_0017_li16153161196">接入模型时的<span class="uicontrol" id="agentarts_05_0106__agentarts_05_0017_uicontrol519510339203">“选择标签”</span>： <ul id="agentarts_05_0106__agentarts_05_0017_ul150145120198"> <li id="agentarts_05_0106__agentarts_05_0017_li1713916479139"><span><img id="agentarts_05_0106__agentarts_05_0017_image162801442112412" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002469079557.png" title="点击放大" class="imgResize"></span>联网：表示该大模型具备联网搜索能力。</li> <li id="agentarts_05_0106__agentarts_05_0017_li16997144151320"><span><img id="agentarts_05_0106__agentarts_05_0017_image17328155072615" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002549929669.png"></span>思考：表示该大模型具备思维推理能力。</li> <li id="agentarts_05_0106__agentarts_05_0017_li1546210458196"><span><img id="agentarts_05_0106__agentarts_05_0017_image145561184254" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002549929455.png"></span>工具：表示该大模型支持应用调用外部工具，例如，MCP服务、插件、知识库等。</li> <li id="agentarts_05_0106__agentarts_05_0017_li3908242132717">限额体验：表示该平台预置大模型可以体验，会话轮数最大为20次。</li> </ul></li> <li id="agentarts_05_0106__agentarts_05_0017_li125821148141814"><span class="uicontrol" id="agentarts_05_0106__agentarts_05_0017_uicontrol1227043815207">“模型类型”</span>包含： <ul id="agentarts_05_0106__agentarts_05_0017_ul216211615193"> <li id="agentarts_05_0106__agentarts_05_0017_li2016218618198"><span><img id="agentarts_05_0106__agentarts_05_0017_image1110532122412" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002518289644.png"></span>文本：表示该大模型是文本对话类型。</li> <li id="agentarts_05_0106__agentarts_05_0017_li6162136101915"><span><img id="agentarts_05_0106__agentarts_05_0017_image128501053265" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002550049571.png"></span>视觉：表示该大模型是图像理解类型。</li> <li id="agentarts_05_0106__agentarts_05_0017_li1016211616192"><span><img id="agentarts_05_0106__agentarts_05_0017_image6187185616127" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002470187664.png"></span>嵌入：表示该大模型是文本向量化类型。</li> <li id="agentarts_05_0106__agentarts_05_0017_li12162268193"><span><img id="agentarts_05_0106__agentarts_05_0017_image1324419353115" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002470347668.png"></span>排序：表示该大模型是文本排序类型。</li> </ul></li> <li id="agentarts_05_0106__agentarts_05_0017_li3930192475310">模型状态： <ul id="agentarts_05_0106__agentarts_05_0017_ul933407155419"> <li id="agentarts_05_0106__agentarts_05_0017_li165801027132510">未验证：表示该大模型未校验鉴权信息，不可使用。</li> <li id="agentarts_05_0106__agentarts_05_0017_li131711346257">成功：表示该大模型鉴权信息校验成功，可以使用。</li> <li id="agentarts_05_0106__agentarts_05_0017_li1783714316256">失败：表示该大模型鉴权信息校验失败，不可使用。</li> </ul></li> </ul> </div> </div> <div class="p" id="agentarts_05_0106__p25141132114"> 在“模型配置”右侧，单击<span><img id="agentarts_05_0106__image155141931817" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595071660.png"></span>，显示如下参数： <ul id="agentarts_05_0106__ul16514631912"> <li id="agentarts_05_0106__li17514231315"><strong id="agentarts_05_0106__b205144315112">核采样</strong>： <p id="agentarts_05_0106__p1514193612">核采样（Top-P）用于限制模型的选词范围。取值范围0.1~1，默认值为0.5。</p> <ul id="agentarts_05_0106__ul135141335112"> <li id="agentarts_05_0106__li05141436114">值接近0时，模型只从概率最高的前10%词汇中选择，输出更集中。</li> <li id="agentarts_05_0106__li85145313114">值接近1时，不做限制，输出更多样。</li> </ul> <p id="agentarts_05_0106__p15515238117">建议该参数和“生成随机性”只设置1个，避免同时调整后效果不可控。</p></li> <li id="agentarts_05_0106__li185151936115"><strong id="agentarts_05_0106__b185151631311">生成随机性</strong>： <p id="agentarts_05_0106__p125151234118">生成随机性（temperature）控制模型输出的随机性和创造性，取值范围0~1，默认值为0.5。</p> <ul id="agentarts_05_0106__ul9515931919"> <li id="agentarts_05_0106__li5515631115">数值越低（接近0）使输出更加确定和一致，适合基于事实的问答和售后客服场景。</li> <li id="agentarts_05_0106__li251573712">数值越高（接近1）使输出更具多样性和创新性，适合创造性任务，如小说创作。</li> </ul> <p id="agentarts_05_0106__p951513311117">建议该参数和“核采样”只设置1个，避免同时调整后效果不可控。</p></li> </ul> </div> <p></p></li> <li id="agentarts_05_0106__li16541944175512"><span id="agentarts_05_0106__">（可选）配置子工作流执行逻辑提示词。</span> <p></p> <p id="agentarts_05_0106__p1792017521203">为编排控制器定义调度逻辑的系统提示词。通过自然语言描述子工作流的执行顺序、优先级规则和协作逻辑，指导模型做出正确的路由决策。</p> <div class="p" id="agentarts_05_0106__p79207527011"> 示例： <pre class="screen" id="agentarts_05_0106__screen16920152307">您是一个智能客服调度系统。根据用户输入判断意图，按以下规则路由到对应的子工作流。
+1、如果用户询问订单相关问题，执行“订单查询”工作流。
+2、如果用户要求退换货，执行“退换货处理”工作流。
+3、如果用户表达不满或投诉，执行“投诉处理”工作流。
+4、如果无法判断意图，执行默认工作流。</pre> </div> <p id="agentarts_05_0106__p14920145211013">用户可单击<span><img id="agentarts_05_0106__image7920105217017" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625671153.png"></span>图标直接引用提示词模板；也可以自行撰写提示词，撰写后可单击<span><img id="agentarts_05_0106__image392035211013" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595231566.png"></span>图标对系统提示词进行智能优化；也可单击<span><img id="agentarts_05_0106__image119201352503" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625590999.png"></span>图标保存到模板，在“我的资产 &gt; 提示词”中可查看该模板。</p> <p></p></li> <li id="agentarts_05_0106__li1932132215565"><span id="agentarts_05_0106__">配置意图识别。</span> <p></p> <p id="agentarts_05_0106__p15558028205">选择该多智能体的意图识别能力。</p> <div class="caution" id="agentarts_05_0106__note1255816281503"> <span class="cautiontitle"><img src="https://support.huaweicloud.com/lowcode-agentarts/public_sys-resources/caution_3.0-zh-cn.png"> </span> <div class="cautionbody"> <p id="agentarts_05_0106__p25588281704">“模型配置（可选）”与“意图识别”参数，至少填写一个。优先调用意图识别工作流或意图包。</p> </div> </div> <ul id="agentarts_05_0106__ul1055812281309"> <li id="agentarts_05_0106__li855816289016"><strong id="agentarts_05_0106__b45581628002">大模型识别模式</strong>：由大模型对用户的输入进行意图理解并分类。选择此值时，“模型配置（可选）”需选择模型。</li> <li id="agentarts_05_0106__li65587289019"><strong id="agentarts_05_0106__b125581528102">工作流识别模式</strong>：由开发者自行编排一个专门用来做意图识别场景的工作流进行处理，可以兼顾准确率和性能。 <p id="agentarts_05_0106__p1558172819016">在“选择工作流”右侧，单击<span><img id="agentarts_05_0106__image15558828503" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595071668.png"></span>，选择意图识别工作流。意图识别工作流的开始节点的输入参数、结束节点的输出参数配置有特殊要求。</p> <p id="agentarts_05_0106__p1355817287010">多智能体运行时，运行流程依次为：用户输入 -&gt; 意图识别工作流 -&gt; 根据意图识别工作流输出的intent_id执行任务。</p> <div class="p" id="agentarts_05_0106__p8559112816010"> 意图识别工作流的开始节点的输入参数、结束节点的输出参数配置如下： <ul id="agentarts_05_0106__ul6559182819017"> <li id="agentarts_05_0106__li14559122817015">开始节点必须配置如<a href="#agentarts_05_0106__fig75594281803">图4</a>所示参数，参数名称和参数类型必须保持一致。 <ul id="agentarts_05_0106__ul11559122820013"> <li id="agentarts_05_0106__li135591828708">messages：对话历史。 <ul id="agentarts_05_0106__ul95596281010"> <li id="agentarts_05_0106__li1955919281303">role：角色。</li> <li id="agentarts_05_0106__li65591828007">content：内容。</li> </ul></li> <li id="agentarts_05_0106__li1755914281503">intents：意图。 <ul id="agentarts_05_0106__ul1555917281707"> <li id="agentarts_05_0106__li455920284017">id：意图序号，取值为从1开始的自然数。</li> <li id="agentarts_05_0106__li1855932815019">name：当id的取值为1时，表示没有明确意图或无法判断用户输入意图；当id的取值为非1时，表示对应的意图。</li> </ul></li> </ul> <div class="fignone" id="agentarts_05_0106__fig75594281803"> <a name="agentarts_05_0106__fig75594281803"></a><a name="fig75594281803"></a><span class="figcap"><b>图4 </b>开始节点配置</span> <br> <span><img id="agentarts_05_0106__image19559112814011" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625671161.png" title="点击放大" class="imgResize"></span> </div></li> <li id="agentarts_05_0106__li1755919287010">结束节点必须配置如<a href="#agentarts_05_0106__fig65599285014">图5</a>所示参数，输出参数名称以及引用的值必须为integer类型。 <p id="agentarts_05_0106__p755992814018">intent_id：子工作流输出的意图结果。输出结果与多智能体中子智能体的对应关系请参考<a href="#agentarts_05_0106__section626216469325">意图识别输出结果说明</a>。</p> <div class="fignone" id="agentarts_05_0106__fig65599285014"> <a name="agentarts_05_0106__fig65599285014"></a><a name="fig65599285014"></a><span class="figcap"><b>图5 </b>结束节点配置</span> <br> <span><img id="agentarts_05_0106__image1355911281006" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595231572.png" title="点击放大" class="imgResize"></span> </div></li> </ul> </div></li> <li id="agentarts_05_0106__li17558928109"><strong id="agentarts_05_0106__b95592028906">高精识别模式</strong>：开发者预先创建意图包，预设多类意图场景，系统结合配置能大幅提升海量意图的识别准确率。 <p id="agentarts_05_0106__p8559102812012">在“选择意图包”下的下拉框中选择意图包。单击“立即创建”可以创建意图包，具体操作请参考<a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0095.html#agentarts_05_0095__section111835148562">创建意图包</a>。</p></li> </ul> <p></p></li> <li id="agentarts_05_0106__li7769165110568"><span id="agentarts_05_0106__">配置子智能体。</span> <p></p> <p id="agentarts_05_0106__p08431915403">每个子智能体对应一类用户意图或业务场景，多Agent控制器根据用户意图自动路由执行，调度逻辑可通过“执行逻辑提示词”灵活定义。</p> <p id="agentarts_05_0106__p1384318157011">在子智能体右侧，单击<span><img id="agentarts_05_0106__image9843121516020" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625591007.png"></span>，支持添加工作流、多智能体。</p> <ul id="agentarts_05_0106__ul1384321517020"> <li id="agentarts_05_0106__li1843111512014">工作流：最多支持添加50个子工作流。 <div class="p" id="agentarts_05_0106__p10843171515018"> <a name="agentarts_05_0106__li1843111512014"></a><a name="li1843111512014"></a>添加工作流后，设置子工作流的执行动作，支持的执行动作如下： <ul id="agentarts_05_0106__ul384317151208"> <li id="agentarts_05_0106__li1684361513014"><strong id="agentarts_05_0106__b68434151805">继续</strong>：执行完该工作流后，继续执行后续流程。有两种场景： <ul id="agentarts_05_0106__ul284312151504"> <li id="agentarts_05_0106__li1484301513017"><strong id="agentarts_05_0106__b1084310159017">场景1：工作流间跳转后继续</strong>。执行工作流A时，如果意图识别需要执行工作流B（且工作流B设为“继续”），则执行完工作流B后，返回工作流A，继续执行A中尚未完成的部分。</li> <li id="agentarts_05_0106__li118431615304"><strong id="agentarts_05_0106__b14843415107">场景2：工作流自身执行完毕后继续</strong>。如果工作流A自身设为“继续”，则执行完工作流A后，调用结束工作流结束当前任务。</li> </ul></li> <li id="agentarts_05_0106__li1084321510012"><strong id="agentarts_05_0106__b48433150013">终止</strong>：执行完该工作流后，调用结束工作流结束当前任务。</li> <li id="agentarts_05_0106__li6843115906"><strong id="agentarts_05_0106__b11843111518012">等待输入</strong>：执行完该工作流后，暂停并等待用户输入问题后再继续执行。</li> </ul> </div></li> <li id="agentarts_05_0106__li1384331514013">多智能体：在多智能体应用中，可以嵌套引用另一个多智能体应用，从而实现多层控制的效果。目前支持2级控制。最多支持添加50个智能体。</li> </ul> <p></p></li> <li id="agentarts_05_0106__li16358120105714"><span id="agentarts_05_0106__">（可选）配置全局意图。</span> <p></p> <p id="agentarts_05_0106__p15347548595">定义全局性的意图识别规则。无论当前正在执行哪条子工作流，一旦检测到匹配的全局意图，将立即触发对应的处理动作。适用于随时可能出现的跨场景指令（如“转人工”、“退出”、“切换话题”）。</p> <p id="agentarts_05_0106__p20534145411591">在“全局意图”右侧，单击<span><img id="agentarts_05_0106__image15534354135919" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595071676.png"></span>，输入意图名称、处理方式、意图的执行动作。</p> <div class="p" id="agentarts_05_0106__p19534354155917"> 支持如下处理方式： <ul id="agentarts_05_0106__ul1653465414599"> <li id="agentarts_05_0106__li353435413595"><strong id="agentarts_05_0106__b1253465455917">直接应答</strong>：配置一段文本，输出给用户。</li> <li id="agentarts_05_0106__li6534854165914"><strong id="agentarts_05_0106__b55341854155911">流程跳转</strong>：关联一个工作流完成对应意图需要执行的动作。</li> </ul> </div> <div class="p" id="agentarts_05_0106__p115341354165913"> 支持如下执行动作： <ul id="agentarts_05_0106__ul1534155413595"> <li id="agentarts_05_0106__li953425465910"><strong id="agentarts_05_0106__b155348549599">继续</strong>：按直接应答/工作流的执行结果，继续执行其他的子工作流。</li> <li id="agentarts_05_0106__li115344543598"><strong id="agentarts_05_0106__b9534354105912">终止</strong>：按直接应答/工作流的执行结果，调用结束工作流结束任务。</li> <li id="agentarts_05_0106__li115341654105917"><strong id="agentarts_05_0106__b653410543598">等待输入</strong>：按直接应答/工作流的执行结果，待用户输入问题后执行任务。</li> </ul> </div> <p></p></li> <li id="agentarts_05_0106__li67730735710"><span id="agentarts_05_0106__">（可选）配置起始工作流。</span> <p></p> <p id="agentarts_05_0106__p1128420471595">无论用户意图识别到哪条子工作流，起始工作流始终最先执行。适用于用户身份验证、会话初始化、欢迎语生成等前置操作。</p> <p id="agentarts_05_0106__p1728474735919">未配置时，系统根据选择的模型、子工作流执行逻辑提示词或意图识别进行意图判断。</p> <p id="agentarts_05_0106__p1328484717596">执行顺序：起始工作流 → 子工作流（按意图路由）→ 结束工作流</p> <div class="p" id="agentarts_05_0106__p1828434719594"> 配置起始工作流操作如下： <ol type="a" id="agentarts_05_0106__ol16284144716592"> <li id="agentarts_05_0106__li10284134716595">在“起始工作流（可选）”右侧，单击<span><img id="agentarts_05_0106__image828444720598" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625671169.png"></span>，在“添加工作流”页面选择作为起始的工作流应用。</li> <li id="agentarts_05_0106__li1828474714592">单击“确定”。 <p id="agentarts_05_0106__p128494718592"><a name="agentarts_05_0106__li1828474714592"></a><a name="li1828474714592"></a>如果选择的工作流需要删除，单击<span><img id="agentarts_05_0106__image1828414473590" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595231582.png"></span>。</p></li> </ol> </div> <p></p></li> <li id="agentarts_05_0106__li264014314575"><span id="agentarts_05_0106__">（可选）配置默认工作流。</span> <p></p> <p id="agentarts_05_0106__p9781183911590">当用户的输入无法匹配您配置的任何一个子工作流所定义的业务意图时，系统将自动执行此处指定的默认工作流，并随即结束当前任务。</p> <p id="agentarts_05_0106__p13781739125918">未配置时，当遇到无法识别的用户问题时，系统将无响应或报错终止，影响用户体验。</p> <div class="p" id="agentarts_05_0106__p10781163911596"> 配置默认工作流的操作如下： <ol type="a" id="agentarts_05_0106__ol11781153915910"> <li id="agentarts_05_0106__li1678123965919">在“默认工作流（可选）”右侧，单击<span><img id="agentarts_05_0106__image147811639155917" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625591017.png"></span>，在“添加工作流”页面选择作为默认的工作流应用。</li> <li id="agentarts_05_0106__li147816397597">单击“确定”。 <p id="agentarts_05_0106__p13781103915915"><a name="agentarts_05_0106__li147816397597"></a><a name="li147816397597"></a>如果选择的工作流需要删除，单击<span><img id="agentarts_05_0106__image2781163912596" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595071686.png"></span>。</p></li> <li id="agentarts_05_0106__li12781103917595">设置工作流的执行动作。 <div class="p" id="agentarts_05_0106__p177811839185919"> <a name="agentarts_05_0106__li12781103917595"></a><a name="li12781103917595"></a>支持的执行动作如下： <ul id="agentarts_05_0106__ul6781173925913"> <li id="agentarts_05_0106__li197810394598"><strong id="agentarts_05_0106__b157812039185914">继续</strong>：按该工作流的执行结果，继续执行其他的子工作流。</li> <li id="agentarts_05_0106__li6781183911598"><strong id="agentarts_05_0106__b127811839125917">终止</strong>：按该工作流的执行结果，调用结束工作流结束任务。</li> <li id="agentarts_05_0106__li9781039185918"><strong id="agentarts_05_0106__b37811839155912">等待输入</strong>：按该工作流的执行结果，待用户输入问题后执行任务。</li> </ul> </div></li> </ol> </div> <p></p></li> <li id="agentarts_05_0106__li2995392579"><span id="agentarts_05_0106__">（可选）配置结束工作流。</span> <p></p> <p id="agentarts_05_0106__p1638153365814">在所有子工作流执行完毕后固定执行的工作流。无论之前的意图路由经过了哪些子工作流，结束工作流始终最后执行。</p> <p id="agentarts_05_0106__p438115335581">适用于会话总结、满意度调查、数据清理等收尾操作。</p> <p id="agentarts_05_0106__p11381143365819">执行顺序：起始工作流 → 子工作流（按意图路由）→ 结束工作流</p> <ul id="agentarts_05_0106__ul163811332587"> <li id="agentarts_05_0106__li738143310580">配置结束工作流的操作如下： <ol type="a" id="agentarts_05_0106__ol163813335584"> <li id="agentarts_05_0106__li10381733145816">在“结束工作流（可选）”右侧，单击<span><img id="agentarts_05_0106__image103817338585" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625671179.png"></span>，在“添加工作流”页面选择作为结束的工作流应用。</li> <li id="agentarts_05_0106__li4381153317582">单击“确定”。 <p id="agentarts_05_0106__p153811933105811"><a name="agentarts_05_0106__li4381153317582"></a><a name="li4381153317582"></a>如果选择的工作流需要删除，单击<span><img id="agentarts_05_0106__image20381633115819" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595231592.png"></span>。</p></li> </ol></li> </ul> <p></p></li> <li id="agentarts_05_0106__li147371547195714"><span id="agentarts_05_0106__">配置最大对话历史轮次。</span> <p></p> <p id="agentarts_05_0106__p1130832214584">编排模型在进行意图识别时，最多参考的历史对话轮数。历史对话轮次越多，意图识别时消耗的Token数越多，产生的费用越高。请根据业务复杂度合理设置。设为0表示不引用历史对话，仅基于当前输入判断意图。</p> <p id="agentarts_05_0106__p33081222125812">设置历史对话次数，选择N，记录最近N条会话内容。例如，选择10，记录最近10条会话内容。取值范围0~100，默认值为10。</p> <p></p></li> <li id="agentarts_05_0106__li932905711572"><span id="agentarts_05_0106__">配置最大跳转次数。</span> <p></p> <p id="agentarts_05_0106__p880671105812">在一次用户会话中，编排控制器最多允许在子工作流之间跳转的次数。<strong id="agentarts_05_0106__b780611165810">防止因意图识别不稳定导致工作流之间无限循环跳转</strong>。达到最大跳转次数后，系统将执行默认工作流并结束任务。</p> <p id="agentarts_05_0106__p280615117586">只有业务工作流之间跳转才会计算次数，起始工作流、结束工作流不计算跳转次数。取值范围0~30，默认值为9。</p> <p id="agentarts_05_0106__p11806411105817">例如，一个多智能体应用含5个工作流，分别为工作流A（起始工作流或默认工作流）、工作流B、工作流C、工作流D、工作流E（结束工作流），根据用户问题先执行工作流A，根据工作流A的结果执行工作流B，根据工作流B的结果执行工作流C，再根据工作流C的结果执行工作流D，最后执行工作流E，相当于跳转了3次。</p> <p></p></li> <li id="agentarts_05_0106__li423520306425"><span id="agentarts_05_0106__">配置完成后，单击“确定”。</span> <p></p> <p id="agentarts_05_0106__p149758589265">设置后，进入“多智能体配置”页面。</p> <ul id="agentarts_05_0106__ul169751658172620"> <li id="agentarts_05_0106__li1397545812619">在“多智能体配置”页面，显示多Agent控制器及添加的工作流、智能体及对应的工作流。 <p id="agentarts_05_0106__p139751158132615"><a name="agentarts_05_0106__li1397545812619"></a><a name="li1397545812619"></a>单击工作流卡片，用户可以自定义意图名称、意图描述。</p> <p id="agentarts_05_0106__p18975558202613">单击智能体卡片，用户可以自定义意图名称、意图描述。</p> <p id="agentarts_05_0106__p209751358172613">单击智能体对应的工作流卡片，显示意图名称、意图描述、输入输出信息。</p> <p id="agentarts_05_0106__p997516581262">在工作流或智能体卡片上，单击“<span><img id="agentarts_05_0106__image79751558132611" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625591025.png"></span> &gt; 工作流详情”或“<span><img id="agentarts_05_0106__image6975135842617" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595071694.png"></span> &gt; 智能体详情”，查看工作流或智能体详情。</p> <p id="agentarts_05_0106__p109759580261">在工作流或智能体卡片上，单击“<span><img id="agentarts_05_0106__image189755583266" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002625671187.png"></span> &gt; 复制工作流ID”或“<span><img id="agentarts_05_0106__image39754585265" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002595231600.png"></span> &gt; 复制智能体ID”，复制工作流或智能体ID。</p></li> <li id="agentarts_05_0106__li49756583265">在“多智能体配置”页面，可以调试、发布多智能体应用，调试与发布多智能体应用请参考<a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0107.html">调试多智能体应用</a>、<a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0108.html">部署多智能体应用为API</a>。</li> </ul> <p></p></li> </ol> </div> <div class="section" id="agentarts_05_0106__section626216469325"> <a name="agentarts_05_0106__section626216469325"></a><a name="section626216469325"></a> <h4 class="sectiontitle">意图识别输出结果说明</h4> <p id="agentarts_05_0106__p12683413517">意图识别工作流的结束节点输出结果是由意图识别工作流产生，输出结果如下所示。<a href="#agentarts_05_0106__table1391711183127">表3</a>所示的意图映射关系列表由多智能体的配置自动生成，从序号1开始递增。</p> <p id="agentarts_05_0106__p76994163512">输出结果示例：</p> <pre class="screen" id="agentarts_05_0106__screen156915418356">{
+    "intent_id":  5
+}</pre> <div class="tableBorder"> <a name="agentarts_05_0106__table1391711183127"></a><a name="table1391711183127"></a> <table cellpadding="4" cellspacing="0" summary="" id="agentarts_05_0106__table1391711183127" frame="border" border="1" rules="all"> <caption> <b>表3 </b>输出结果分类 </caption> <thead align="left"> <tr id="agentarts_05_0106__row1091817188124"> <th align="left" class="cellrowborder" valign="top" width="20%" id="mcps1.3.8.5.2.4.1.1" liselected="liSelected"> <p id="agentarts_05_0106__p1991881819129">任务的序号生成规则</p> </th> <th align="left" class="cellrowborder" valign="top" width="40%" id="mcps1.3.8.5.2.4.1.2" liselected="liSelected"> <p id="agentarts_05_0106__p191851851210">说明</p> </th> <th align="left" class="cellrowborder" valign="top" width="40%" id="mcps1.3.8.5.2.4.1.3" liselected="liSelected"> <p id="agentarts_05_0106__p169189182121">示例</p> </th> </tr> </thead> <tbody> <tr id="agentarts_05_0106__row1491801815125"> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.8.5.2.4.1.1 "> <p id="agentarts_05_0106__p591811187127">1</p> </td> <td class="cellrowborder" valign="top" width="40%" headers="mcps1.3.8.5.2.4.1.2 "> <p id="agentarts_05_0106__p16918161851212">系统默认意图（不明意图）。当用户输入无法匹配任何已知配置，指向此分类。</p> <p id="agentarts_05_0106__p115771717183811">当intent_id值为1时，不执行任何任务，输出提示“抱歉，未识别到您的意图，请重新输入”。</p> </td> <td class="cellrowborder" valign="top" width="40%" headers="mcps1.3.8.5.2.4.1.3 "> <p id="agentarts_05_0106__p491861819125">-</p> </td> </tr> <tr id="agentarts_05_0106__row291811817122"> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.8.5.2.4.1.1 "> <p id="agentarts_05_0106__p139184188124">2~1+N</p> </td> <td class="cellrowborder" valign="top" width="40%" headers="mcps1.3.8.5.2.4.1.2 "> <p id="agentarts_05_0106__p199181218151217">全局意图。如果配置了全局意图，intent_id值在此范围内，则会执行对应的全局意图。</p> <p id="agentarts_05_0106__p1494504371511">N为全局意图从上往下的序号。</p> </td> <td class="cellrowborder" valign="top" width="40%" headers="mcps1.3.8.5.2.4.1.3 "> <ul id="agentarts_05_0106__ul12014511158"> <li id="agentarts_05_0106__li170351131519">如果配置1个全局意图，当intent_id值为2时，执行这个全局意图。 <p id="agentarts_05_0106__p187611655161520"><a name="agentarts_05_0106__li170351131519"></a><a name="li170351131519"></a><span><img id="agentarts_05_0106__image21741611172414" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002746629375.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li1304519158">如果配置2个全局意图，当intent_id值为3时，执行第2个全局意图。 <p id="agentarts_05_0106__p172678018169"><a name="agentarts_05_0106__li1304519158"></a><a name="li1304519158"></a><span><img id="agentarts_05_0106__image1315455520248" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002746629401.png" title="点击放大" class="imgResize"></span></p></li> </ul> </td> </tr> <tr id="agentarts_05_0106__row1091891819129"> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.8.5.2.4.1.1 "> <p id="agentarts_05_0106__p1891821817127">（1+N）+1~1+N+M</p> </td> <td class="cellrowborder" valign="top" width="40%" headers="mcps1.3.8.5.2.4.1.2 "> <p id="agentarts_05_0106__p29185183122">子工作流意图。如果配置了子工作流，intent_id值在此范围内，则会执行对应的子工作流。</p> <p id="agentarts_05_0106__p134121642122317">N为全局意图从上往下的序号。</p> <p id="agentarts_05_0106__p12760523151616">M为子工作流从上往下的序号。</p> </td> <td class="cellrowborder" valign="top" width="40%" headers="mcps1.3.8.5.2.4.1.3 "> <ul id="agentarts_05_0106__ul4821528161615"> <li id="agentarts_05_0106__li88211628161618">如果不配置全局意图，配置1个子工作流，当intent_id值为2时，执行这个子工作流。 <p id="agentarts_05_0106__p188861230141615"><a name="agentarts_05_0106__li88211628161618"></a><a name="li88211628161618"></a><span><img id="agentarts_05_0106__image5617201272215" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002716949370.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li88214287165">如果不配置全局意图，配置2个子工作流，当intent_id值为3时，执行第2个子工作流。 <p id="agentarts_05_0106__p51701932161619"><a name="agentarts_05_0106__li88214287165"></a><a name="li88214287165"></a><span><img id="agentarts_05_0106__image12753155911220" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002716949374.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li1382111285169">如果配置1个全局意图、1个子工作流，当intent_id值为3时，执行这个子工作流。 <p id="agentarts_05_0106__p768873310164"><a name="agentarts_05_0106__li1382111285169"></a><a name="li1382111285169"></a><span><img id="agentarts_05_0106__image1441945162515" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002717109450.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li17821728171617">如果配置1个全局意图、2个子工作流，当intent_id值为3时，执行第2个子工作流。 <p id="agentarts_05_0106__p663120356165"><a name="agentarts_05_0106__li17821728171617"></a><a name="li17821728171617"></a><span><img id="agentarts_05_0106__image178471146172712" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002746469513.png" title="点击放大" class="imgResize"></span></p></li> </ul> </td> </tr> <tr id="agentarts_05_0106__row9704104113165"> <td class="cellrowborder" valign="top" width="20%" headers="mcps1.3.8.5.2.4.1.1 "> <p id="agentarts_05_0106__p16704134161618">（1+N+M）+1~1+N+M+K</p> </td> <td class="cellrowborder" valign="top" width="40%" headers="mcps1.3.8.5.2.4.1.2 "> <p id="agentarts_05_0106__p167041941121619">子智能体意图。如果配置了子智能体，intent_id值在此范围内，则会执行对应的子智能体。</p> <p id="agentarts_05_0106__p540045062314">N为全局意图从上往下的序号。</p> <p id="agentarts_05_0106__p6352558111615">M为子工作流从上往下的序号。</p> <p id="agentarts_05_0106__p125141523231">K为子智能体从上往下的序号。</p> </td> <td class="cellrowborder" valign="top" width="40%" headers="mcps1.3.8.5.2.4.1.3 "> <ul id="agentarts_05_0106__ul72831636179"> <li id="agentarts_05_0106__li72839313173">如果不配置全局意图、子工作流，配置1个子智能体，当intent_id值为2时，执行这个子智能体。 <p id="agentarts_05_0106__p388766111717"><a name="agentarts_05_0106__li72839313173"></a><a name="li72839313173"></a><span><img id="agentarts_05_0106__image19461230182914" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002717109588.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li1428316371714">如果不配置全局意图、子工作流，配置2个子智能体，当intent_id值为3时，执行第2个子智能体。 <p id="agentarts_05_0106__p188011377171"><a name="agentarts_05_0106__li1428316371714"></a><a name="li1428316371714"></a><span><img id="agentarts_05_0106__image863811231787" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002746636835.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li628383181710">如果不配置全局意图，配置1个子工作流、1个子智能体，当intent_id值为3时，执行这个子智能体。 <p id="agentarts_05_0106__p37941811715"><a name="agentarts_05_0106__li628383181710"></a><a name="li628383181710"></a><span><img id="agentarts_05_0106__image16623484911" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002716950836.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li928312313172">如果不配置全局意图，配置1个子工作流、2个子智能体，当intent_id值为4时，执行第2个子智能体。 <p id="agentarts_05_0106__p1377812991711"><a name="agentarts_05_0106__li928312313172"></a><a name="li928312313172"></a><span><img id="agentarts_05_0106__image6982111815018" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002746470799.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li11283436177">如果配置1个全局意图、1个子工作流、1个子智能体，当intent_id值为4时，执行这个子智能体。 <p id="agentarts_05_0106__p158631810181711"><a name="agentarts_05_0106__li11283436177"></a><a name="li11283436177"></a><span><img id="agentarts_05_0106__image1182711511515" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002746631331.png" title="点击放大" class="imgResize"></span></p></li> <li id="agentarts_05_0106__li102838312179">如果配置1个全局意图、1个子工作流、2个子智能体，当intent_id值为5时，执行第2个子智能体。 <p id="agentarts_05_0106__p716216136177"><a name="agentarts_05_0106__li102838312179"></a><a name="li102838312179"></a><span><img id="agentarts_05_0106__image207453495515" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002717111684.png" title="点击放大" class="imgResize"></span></p></li> </ul> </td> </tr> </tbody> </table> </div> </div> <div class="section" id="agentarts_05_0106__section1975581921112"> <h4 class="sectiontitle">相关操作</h4> <p id="agentarts_05_0106__p976620479166">在“多智能体配置”页面，对画布的操作如下。</p> <p id="agentarts_05_0106__p146001481659"><span><img id="agentarts_05_0106__image8621048205414" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002518506688.png" title="点击放大" class="imgResize"></span></p> <div class="tableBorder"> <table cellpadding="4" cellspacing="0" summary="" id="agentarts_05_0106__table193081037398" frame="border" border="1" rules="all"> <caption> <b>表4 </b>画布操作 </caption> <thead align="left"> <tr id="agentarts_05_0106__row1230819371998"> <th align="left" class="cellrowborder" valign="top" width="30%" id="mcps1.3.9.4.2.3.1.1" liselected="liSelected"> <p id="agentarts_05_0106__p1130823710919">图标</p> </th> <th align="left" class="cellrowborder" valign="top" width="70%" id="mcps1.3.9.4.2.3.1.2" liselected="liSelected"> <p id="agentarts_05_0106__p1630818371098">说明</p> </th> </tr> </thead> <tbody> <tr id="agentarts_05_0106__row143081637496"> <td class="cellrowborder" valign="top" width="30%" headers="mcps1.3.9.4.2.3.1.1 "> <p id="agentarts_05_0106__p103083371992"><span><img id="agentarts_05_0106__image331015261388" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002517574016.png"></span></p> </td> <td class="cellrowborder" valign="top" width="70%" headers="mcps1.3.9.4.2.3.1.2 "> <p id="agentarts_05_0106__p43087375920">显示/隐藏缩略图。</p> </td> </tr> <tr id="agentarts_05_0106__row183081037193"> <td class="cellrowborder" valign="top" width="30%" headers="mcps1.3.9.4.2.3.1.1 "> <p id="agentarts_05_0106__p1630843715912"><span><img id="agentarts_05_0106__image197891626592" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002517733922.png"></span></p> </td> <td class="cellrowborder" valign="top" width="70%" headers="mcps1.3.9.4.2.3.1.2 "> <p id="agentarts_05_0106__p133080371199">查看画布节点。</p> </td> </tr> <tr id="agentarts_05_0106__row330818372911"> <td class="cellrowborder" valign="top" width="30%" headers="mcps1.3.9.4.2.3.1.1 "> <p id="agentarts_05_0106__p43089372915"><span><img id="agentarts_05_0106__image208445341279" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002549173787.png"></span></p> </td> <td class="cellrowborder" valign="top" width="70%" headers="mcps1.3.9.4.2.3.1.2 "> <p id="agentarts_05_0106__p15308153716919">缩小/放大画布内容。</p> </td> </tr> <tr id="agentarts_05_0106__row330813371692"> <td class="cellrowborder" valign="top" width="30%" headers="mcps1.3.9.4.2.3.1.1 "> <p id="agentarts_05_0106__p1630812371998"><span><img id="agentarts_05_0106__image14217307133" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002517733926.png"></span>/<span><img id="agentarts_05_0106__image1612417149145" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002549173791.png"></span></p> </td> <td class="cellrowborder" valign="top" width="70%" headers="mcps1.3.9.4.2.3.1.2 "> <p id="agentarts_05_0106__p203083374910">全局折叠/展开节点。</p> </td> </tr> <tr id="agentarts_05_0106__row530816373916"> <td class="cellrowborder" valign="top" width="30%" headers="mcps1.3.9.4.2.3.1.1 "> <p id="agentarts_05_0106__p83081371798"><span><img id="agentarts_05_0106__image1135718317155" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002549253781.png"></span></p> </td> <td class="cellrowborder" valign="top" width="70%" headers="mcps1.3.9.4.2.3.1.2 "> <p id="agentarts_05_0106__p5309183716911">画布内容居中显示。</p> </td> </tr> <tr id="agentarts_05_0106__row730918371192"> <td class="cellrowborder" valign="top" width="30%" headers="mcps1.3.9.4.2.3.1.1 "> <p id="agentarts_05_0106__p93091737893"><span><img id="agentarts_05_0106__image129181952167" src="https://support.huaweicloud.com/lowcode-agentarts/zh-cn_image_0000002517574024.png"></span></p> </td> <td class="cellrowborder" valign="top" width="70%" headers="mcps1.3.9.4.2.3.1.2 "> <p id="agentarts_05_0106__p2356153311114">画布内容布局优化。</p> </td> </tr> </tbody> </table> </div> </div> <div class="section" id="agentarts_05_0106__section9965812202510"> <h4 class="sectiontitle">常见问题</h4> <ul id="agentarts_05_0106__ul6209164716259"> <li id="agentarts_05_0106__li17209747202514"><strong id="agentarts_05_0106__b1149038152511">Q1：意图识别准确率低，用户意图频繁路由错误，怎么办？</strong> <p id="agentarts_05_0106__p1011184313269">排查步骤：</p> <ol id="agentarts_05_0106__ol01111743182616"> <li id="agentarts_05_0106__li211144392612">检查“子工作流执行逻辑提示词”是否清晰描述了各意图的区分边界。</li> <li id="agentarts_05_0106__li101111343202616">如果使用大模型识别模式，尝试切换至“高精识别模式”并配置意图包。</li> <li id="agentarts_05_0106__li14111164362614">增加每个子工作流卡片上的意图描述，提供更多示例语句。</li> <li id="agentarts_05_0106__li11119432262">适当降低最大对话历史轮次，减少历史干扰。</li> </ol></li> <li id="agentarts_05_0106__li2209104792511"><strong id="agentarts_05_0106__b1626124172511">Q2：配置了默认工作流，但用户无意图时系统仍然无响应？</strong> <p id="agentarts_05_0106__p4661430192715">检查默认工作流的执行动作是否设置为“终止”，如果设为“继续”，可能导致流程未正常结束。</p></li> <li id="agentarts_05_0106__li982819554256"><strong id="agentarts_05_0106__b482855552518">Q3：intent_id计算后与实际路由不符？</strong> <p id="agentarts_05_0106__p4671422172816">重新核对配置中全局意图、子工作流、子智能体的排列顺序。intent_id严格按照界面从上到下的顺序生成，调整顺序后映射关系随之变化。</p></li> </ul> <ul id="agentarts_05_0106__ul353735952515"> <li id="agentarts_05_0106__li120950142615"><strong id="agentarts_05_0106__b9209110102613">Q4：工作流一直在子工作流之间循环跳转？</strong> <p id="agentarts_05_0106__p1111443287">降低最大跳转次数，并检查子工作流的执行动作设置，确认不需要继续流转的工作流已设置为“终止”。</p></li> </ul> </div> </div> </div> <div class="footerNavBar clearfix"> <div class="parentlink"> 父主题： <a href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0102.html">开发多智能体应用 </a> </div> </div> <script language="JavaScript">
+<!--
+initImageViewer('.imgResize');
+var msg_imageMax = "查看原图";
+var msg_imageClose = "关闭";
+//--></script> </div> <script>
+    (function ($) {
+      $.fn.bigrender = function (opts) {
+
+        var winHeight = document.documentElement.clientHeight;
+        var sum = 0;
+        var count = 0;
+        var flash = new Array();
+
+        // 'class' 是textarea父节点的类；'textarea' 是textarea标签的类；'threshold'是距离进入屏幕还有150像素就开始渲染；'remove'是否删除textarea标签       
+        options = $.extend({
+          'class': '.br-warp',
+          'textarea': '.br-rendered',
+          'threshold': 150,
+          'remove': true,
+        }, opts);
+
+        $brenders = $(options.class);
+        // 渲染首屏的内容
+        initBigrender();
+        // 绑定滚动条事件
+        scrollDisplay();
+
+
+        // 函数定义
+        function initBigrender() {
+          $brenders.each(function (n, object) {
+            sum++;
+            if (isRender($(this))) {
+              display($(this));
+              count++;
+              flash[n] = true;
+            } else {
+              flash[n] = false;
+            }
+          });
+        }
+
+        // 判断时候需要渲染
+        function isRender(object) {
+          offsetTop = object.offset().top;
+          ojh = object.outerHeight(true);
+          st = Math.max(document.body.scrollTop || document.documentElement.scrollTop);
+
+          if (offsetTop + ojh + options.threshold >= st && offsetTop - options.threshold < (st + winHeight)) {
+            return true;
+          } else return false;
+
+        }
+
+        // 渲染textarea内的html代码
+        function display(object) {
+          $display = object.find(options.textarea).eq(0);
+          object.append($display.val());
+          if (options.remove) {
+            $display.remove();
+          }
+        }
+
+        // 屏幕绑定滚动条事件，当待渲染的内容进入可视屏幕就触发isRender函数
+        function scrollDisplay() {
+          $(window).scroll(function () {
+            if (count < sum) {
+              $brenders.each(function (n, object) {
+                if (!flash[n]) {
+                  if (isRender($(this))) {
+                    display($(this));
+                    count++;
+                    flash[n] = true;
+                  }
+                }
+              });
+            }
+          });
+        }
+      };
+    })(jQuery);
+    window.addEventListener('DOMContentLoaded', function (event) {
+      $.fn.bigrender({ 'threshold': 100 });
+    });
+    $(document).data('ajaxNav') && $(document).data('ajaxNav').addEvent('load', function () {
+      $.fn.bigrender({ 'threshold': 100 });
+    });
+  </script> <div class="help-detail-feedback "> <div class="action"> <p class="prev"> <span class="label js-title"></span> <a class="link help-link js-title" href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0105.html" mate_data_ts_v2="zh-cn_support_detail_agentarts.click_上一篇：多智能体执行范式">上一篇：多智能体执行范式</a> </p> <p class="next"> <span class="label js-title"></span> <a class="link help-link js-title" href="https://support.huaweicloud.com/lowcode-agentarts/agentarts_05_0107.html" mate_data_ts_v2="zh-cn_support_detail_agentarts.click_下一篇：调试多智能体应用">下一篇：调试多智能体应用</a> </p> </div> </div> <div class="relevant-content"> <div class="relevant-body"> <h4 class="relevant-title">相关文档</h4> <ul class="relevant-left"></ul> </div> <div class="doc-bottom-feedback"> <h3 class="feedback-title"> <span>您对此文档页面的整体评价？</span> </h3> <div class="help-form" bi_parent_name="feedback"> <div class="help-btn-wrap"> <div class="help-form-content"> <div class="star-score-btns"> <div id="score0" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_0星"><span>0</span><i class="help-form-n"></i></div> <div id="score1" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_1星"><span>1</span><i class="help-form-n"></i></div> <div id="score2" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_2星"><span>2</span><i class="help-form-n"></i></div> <div id="score3" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_3星"><span>3</span><i class="help-form-n"></i></div> <div id="score4" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_4星"><span>4</span><i class="help-form-n"></i></div> <div id="score5" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_5星"><span>5</span><i class="help-form-n"></i></div> <div id="score6" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_6星"><span>6</span><i class="help-form-n"></i></div> <div id="score7" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_7星"><span>7</span><i class="help-form-m"></i></div> <div id="score8" class="help-form-btn help-btn-unuse" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_8星"><span>8</span><i class="help-form-m"></i></div> <div id="score9" class="help-form-btn help-btn-use" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_9星"><span>9</span><i class="help-form-y"></i></div> <div id="score10" class="help-form-btn help-btn-use" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_10星"><span>10</span><i class="help-form-y"></i></div> </div> <div class="star-score-tip"> <span>非常不满意</span><span>非常满意</span> </div> </div> <a class="help-form-btn provide-feedback" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_提供反馈">提供反馈</a> </div> <div class="por-tip success help-form-success"> <div class="por-tip-content"> <i class="por-icon por-icon-success"></i> <div class="por-tip-wenzi"> <span>提交成功！非常感谢您的反馈，我们会继续努力做到更好！<span class="logged-text-str">您可在<a href="https://bbs.huaweicloud.com/mysuggestion" target="_blank" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_我的云声建议.submitted">我的云声建议</a>查看反馈及问题处理状态。</span></span> <span class="por-tip-remove"></span> </div> </div> </div> <div class="por-tip error help-form-false"> <div class="por-tip-content"> <i class="por-icon por-icon-error"></i> <div class="por-tip-wenzi"> <span>系统繁忙，请稍后重试</span> <span class="por-tip-remove"></span> </div> </div> </div> <form action="" data-evaluate-level=""> <div class="question-negative"> <div class="support-mast">您遇到了哪些问题？（最多选三项）</div> <div class="por-checkbox-group"> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="内容不易理解" name="question" id="support_suggest_0"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_0" class="">内容不易理解</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="内容不正确" name="question" id="support_suggest_1"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_1">内容不正确</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="内容不完整" name="question" id="support_suggest_2"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_2">内容不完整</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="阅读体验不佳" name="question" id="support_suggest_3"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_3">阅读体验不佳</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="产品问题" name="question" id="support_suggest_4"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_4">产品问题</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="其他" name="question" id="support_suggest_5"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_5">其他</label> </div> </div> </div> <div class="question-positive"> <div class="support-mast">您感到满意的原因是？（最多选三项）</div> <div class="por-checkbox-group"> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="内容易理解" name="question_positive" id="support_suggest_0_positive"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_0_positive">内容易理解</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="内容正确" name="question_positive" id="support_suggest_1_positive"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_1_positive">内容正确</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="内容丰富" name="question_positive" id="support_suggest_2_positive"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_2_positive">内容丰富</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="阅读体验友好" name="question_positive" id="support_suggest_3_positive"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_3_positive">阅读体验友好</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="产品功能完备" name="question_positive" id="support_suggest_4_positive"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_4_positive">产品功能完备</label> </div> <div class="por-checkbox-inline"> <div class="por-checkbox"> <input class="por-native" type="checkbox" value="其他" name="question_positive" id="support_suggest_5_positive"> <span><i class="u-icon u-icon-confirm"></i></span> </div> <label for="support_suggest_5_positive">其他</label> </div> </div> </div> <p class="support-mast optional">意见反馈</p> <div class="textarea-wrapper"> <textarea maxlength="500" rows="10" cols="30" placeholder="欢迎反馈更多建议"></textarea> <div class="textarea-numbers"><span>0</span>/500</div> </div> <p class="important choose"> <span class="por-icon por-icon-error"></span>请至少选择一项反馈信息并填写问题反馈 </p> <p class="important length"><span class="por-icon por-icon-error"></span>字符长度不能超过500</p> <a href="javascript:void(0)" class="por-btn por-btn-primary submit" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_直接提交">直接提交</a> <a href="javascript:void(0)" class="por-btn por-btn-secondary false" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_取消">取消</a> </form> <div class="contact-decs"> <p>如您有其它疑问，您也可以通过华为云社区问答频道来与我们联系探讨</p> <a href="https://www.huaweicloud.com/ai-assistant/index.html" class="help-form-more" target="_blank" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_云宝助手提问">云宝助手提问 </a><a href="https://bbs.huaweicloud.com/forum/" target="_blank" class="help-form-more" mate_data_ts_v2="zh-cn_support_detail_agentarts_bottomfeedback.click_云社区提问">云社区提问</a> </div> </div> </div> </div> </div> <div class="guide-buoy" mate_data_ts_v2="zh-cn_support_detail_agentarts_introduction.open"></div> <div class="guide-model"> <div class="img-container" mate_data_ts_v2="zh-cn_support_detail_agentarts_introduction.close"></div> </div> </div> </div> <span class="show-menu-btn"></span> </div> </div> </div> <div class="footer-service" meta-data-adjust-app="hide"></div> <script src="https://res.hc-cdn.com/cnpm-portal-utils/1.4.16/PortalUtils.umd.js"></script> <script src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/web_resoure/cms/static/js/v2/clipboard.js"></script> <script src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/support/resource/framework/js/highlight.min.js"></script> <div id="register"></div> <div id="service"></div> <script>
+  var furionAppCode = '';
+  var $currentUrl = location.href;
+  const $path = location.pathname;
+  if($currentUrl.indexOf("/pricing/calculator.html") !== -1 || $currentUrl.indexOf("/pricing/index.html") !== -1){
+    furionAppCode = 'D00903385CF649FCA048B5DE1C1E6D4E';
+  }else if($currentUrl.indexOf("https://activity.huaweicloud.com") === 0) {
+    furionAppCode = '51D7385A7D2B4937BB45DC755E82C48C';
+  } else if ($currentUrl.indexOf("https://support.huaweicloud.com") === 0) {
+    furionAppCode = '1C04D12EB0F8479A9DA9A24639FCA81C';
+  }else{
+    furionAppCode = '7D9AB7C5E01D4698B7B918065C762796';
+  }
+  if(!window.__fr && furionAppCode){
+    !function(x, n) {
+      window[n] = window[n] || {};
+      window[n].config = {
+          appId: furionAppCode,setting: "api,jsTrack,uba,longtask,rtti",hashMode: true,closeReportFMP: true,
+      };
+      var o = document.createElement('script');
+      o.src = x, o.async = !0;
+      var d = document.body.firstChild;
+      document.body.insertBefore(o, d);
+    }('https://portal.hc-cdn.com/FurionSdkStatic/3.6.55/furion-cdn.min.js', '__fr');
+  }
+</script> <script src="https://portal.hc-cdn.com/cnpm-global-resources/1.1.16/js/bi_new.js?sttl=3.0.87"></script> <script>
+    if (window.NodeList && !NodeList.prototype.forEach) {
+        NodeList.prototype.forEach = function (callback, thisArg) {
+            thisArg = thisArg || window;
+            for (var i = 0; i < this.length; i++) {
+                callback.call(thisArg, this[i], i, this);
+            }
+        };
+    }
+</script> <script src="https://portal.hc-cdn.com/cnpm-global-resources/1.2.21/js/global.min.js" crossorigin="anonymous"></script> <script src="https://portal.hc-cdn.com/cnpm-baseui/3.0.18/theme-token.js?sttl=3.0.87&ttr=1.2.21" crossorigin="anonymous"></script> <script type="text/javascript" src="https://portal.hc-cdn.com/cnpm-global-resources/1.2.21/js/feloader.js" crossorigin="anonymous"></script> <div class="hide-sttl" style="height: 0;width:0" data-sttl="3.0.87"></div> <script>
+    window.sttlVersion = $('.hide-sttl').attr('data-sttl') || '2020';
+</script> <script>
+            if( !/pcloudApp/i.test(navigator.userAgent) ){
+                $("#header").css("display","block");
+            }
+        </script> <!-- TODO：兼容AEM的埋点 Begin--> <script>
+    // edit--china--en-us--declaration
+    var $ts_site = "china";
+    var $ts_lang = "zh-cn".replace("_", "-");
+    var $ts_domain = window.location.host.split('.')[1] ? window.location.host.split('.')[0] : 'localhost';
+    var channel = "support";
+    var $uri = channel?"/detail.html":"detail.html";
+    var $pepchannel = (channel+$uri).split("/").join("_").replace(".html","");
+    window.matedataDomain = $ts_domain;
+
+    // if open in app, should change ts_domain in to "app"
+    if( /pcloudApp/i.test(navigator.userAgent) ) {
+        window.matedataDomain = "app";
+    }else{
+        var str = window.location.search;
+        var suband = "type=android";
+        var subios = "type=ios";
+        if( str.indexOf(subios)!=-1 || str.indexOf(suband)!=-1 ){
+            window.matedataDomain = "app";
+        }
+    }
+
+    // 新系统中生成的方式需要改下
+    window.pageMatedataPrefix = window.matedataDomain + "_" + $ts_site + "_" + $ts_lang + "_" + $pepchannel + ".click.";
+    window.headerMatedataPrefix = window.matedataDomain + "_" + $ts_site + "_" + $ts_lang + "_" + $pepchannel + "_navigation.click.";
+    window.footerMatedataPrefix = window.matedataDomain + "_" + $ts_site + "_" + $ts_lang + "_" + $pepchannel + "_footer.click.";
+    window.registerMatedataPrefix = window.matedataDomain + "_" + $ts_site + "_" + $ts_lang + "_" + $pepchannel + "_register.click.";
+    window.serviceMatedataPrefix = window.matedataDomain + "_" + $ts_site + "_" + $ts_lang + "_" + $pepchannel + "_service.click.";
+    window.pep_uaid = ($ts_site=="china") ? "UA-55836286-1" : "UA-55836286-39";
+    window.mate_data_ts_pageType = $pepchannel;
+</script> <!-- TODO：兼容AEM的埋点 End--> <script>
+    function showFooter(){
+       if(window.matedataDomain != "app") {
+           $("#footer .footer-nav").css('display','block');
+           $("#footer .footer-copyright-container").css('display','block');
+           $(".footer-service .footer-wrapper").css('display','block');
+           $("#footer #videoDiv").css('display','none');
+       }
+    }
+    if (window.feloader) {
+        feloader.onLoad(function(){
+            feloader.getScript('https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/static/v2_resources/css/product-icons.css');
+            feloader.getScript('https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/static/v2_resources/css/iconFont-solution.css');
+            showFooter()
+        })
+    }
+    else{
+        document.write("<link rel='stylesheet' href='https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/static/v2_resources/css/product-icons.css'>");
+        document.write("<link rel='stylesheet' href='https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/static/v2_resources/css/iconFont-solution.css'>");
+        showFooter();
+    }
+
+    // 处理一下a标签href是tel的场景
+    var telsEle = $("a[href^='tel:'][target]");
+    telsEle .removeAttr("target");
+</script> <script>
+    if (window.$aioList && window.$aioList.length > 0) {
+        for (var i = 0; i < window.$aioList.length; i++) {
+            var tmpComponent = window.$aioList[i];
+            if (tmpComponent) {
+                var tmpComponentInfo = tmpComponent.split("/");
+                if (tmpComponentInfo.length == 2) {
+                    var name = tmpComponentInfo[0];
+                    var version = tmpComponentInfo[1];
+                    var tmpComponentWrapperEle = $('[data-mod-name="' + name + '"]');
+                    var eleVersionAttr = tmpComponentWrapperEle.attr("data-mod-version");
+                    if (eleVersionAttr && eleVersionAttr != version) {
+                        var linkEle = $('head link[href*="' + name + '/' + version + '"]');
+                        linkEle.attr("href", linkEle.attr("href").replace(version, eleVersionAttr));
+                    }
+                }
+            }
+        }
+    }
+</script> <script>
+    // document.referrer可以获取浏览器上一次地址，如果document.referrer是空字符串，则不为语言切换场景
+    window.refLan = "";
+    window.$PEP = true;
+
+    function getSiteFromURL() {
+        url = window.location.host;
+        urlArr = url.split(".");
+        if (urlArr[0] == "www") {
+            reg = "CN";
+        } else {
+            reg = "HK"
+        }
+        return reg;
+    }
+    var siteStr = $('html').attr("site")
+    if (siteStr) {
+        window.reg = siteStr == "china" ? "CN" : siteStr.toUpperCase();
+    } else {
+        window.reg = getSiteFromURL();
+    }
+
+    window.promptLan = $('html').attr("lang");
+
+    if (document.referrer != "") {
+        if (document.referrer.indexOf("/authui/login") == -1) {
+            if (document.referrer.indexOf(".com/intl") != -1) {
+                window.refLan = (document.referrer.indexOf(".com/intl/zh-cn") != -1) ? "zh-CN" : ((document.referrer.indexOf(".com/intl/en-us") != -1) ? "en-US" : "es-US");
+            } else {
+                window.refLan = (document.referrer.indexOf(".com/en-us") != -1) ? "en-US" : "zh-CN";
+            }
+        } else {
+            //window.refLan = (document.referrer.indexOf("locale=zh-cn") != -1) ? "zh-CN" : "en-US";
+            if (document.referrer.indexOf("locale=") != -1) {
+                window.refLan = (document.referrer.indexOf("locale=zh-cn") != -1) ? "zh-CN" : ((document.referrer.indexOf("locale=en-us") != -1) ? "en-US" : "es-US");
+            } else {
+                window.refLan = window.promptLan;
+            }
+        }
+    } else {
+        window.refLan = window.promptLan;
+    }
+</script> <!--/* 55 trace for some special page */--> <script>
+    !function ($) {
+        if (window.dataLayer && window.dataLayer.push) {
+
+            if (window.location.pathname == "/consultation/") {
+                $("#submitBtn").click(function (e) {
+                    window.dataLayer.push({
+                        "event": "consultSubmit",
+                        "productName": $("#applicationscene").val()
+                    });
+                })
+            }
+
+            $("#header .header-login").click(function (e) {
+                window.dataLayer.push({
+                    "event": "loginIntention"
+                })
+            });
+
+            $("#header .header-register").click(function (e) {
+                window.dataLayer.push({
+                    "event": "creationIntention",
+                    "pageType": window.mate_data_ts_pageType,
+                    "pagePosition": "Header"
+                })
+            });
+
+
+        }
+    }(jQuery);
+</script> <script src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/apm/wise_trace.min.js?sttl=3.0.87"></script> <script>
+    $("a[href*='/pep-dialog/']").each(function () {
+        var ele = $(this);
+        var href = ele.attr("href");
+        var path = href.replace(/.html/g, "");
+        var ajaxPath = path.indexOf("activity/") == -1 ? path : path.split("activity/")[1];
+        var arr = path.split("/");
+        var dialogName = arr[arr.length - 1];
+        var location_lang = $('html').attr('lang').toLowerCase();
+        var site = $('html').attr('site').toLowerCase() == 'china' ? 'china' : 'hk';  //  站点判断，国内：china；国际站：hk
+        var dialogUrl = (window.location.host.indexOf(".com") != -1 && window.location.host.indexOf("pep.huaweicloud.com") == -1) ? "https://" + window.location.host + "/" + ajaxPath + "/jcr:content/dialog.html?wcmmode=disabled" : "/content/cloudbu-site/" + site + "/" + location_lang + "/activity/" + ajaxPath + "/jcr:content/dialog.html?wcmmode=disabled";
+        ele.css('pointer-events', 'auto');
+        ele.on("click", function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            if ($("body [data-pep-path*='" + dialogName + "']").length !== 0) {
+                $("body [data-pep-path*='" + dialogName + "']").remove();
+            }
+            // dialog for activity
+            $.ajax({
+                url: dialogUrl,
+                success: function (data) {
+                    if (data) {
+                        data = data.replace('block', 'none');
+                        $("body").append(data);
+                        $("#modal-rule").html($("body [data-pep-path*='" + dialogName + "']").html());
+                        window.activityModal.show('#modal-rule', true);
+                    }
+                }
+            })
+        });
+    });
+</script> <time style="display:none!important;" datetime="2025-09-24T14:08:06.000+08:00">2025-09-24</time> <div class="footer-service" bi_parent_name="service" meta-data-adjust-app="hide"> <div class="footer-service-wrapper por-container"> <ul> <li> <a href="https://www.huaweicloud.com/service/protection.html#section-0" bi_name="7*24" target="_blank"> <i class="footer-icon-support lazyload" data-src="https://portal.hc-cdn.com/cnpm-header-and-footer/1.1.0/base/footer-china/components/service/images/support.svg"></i> <p class="footer-title">7*24</p> <p>多渠道服务支持</p> </a> </li> <li> <a href="https://beian.huaweicloud.com" bi_name="备案" target="_blank"> <i class="footer-icon-support lazyload" data-src="https://portal.hc-cdn.com/cnpm-header-and-footer/1.1.0/base/footer-china/components/service/images/record.svg"></i> <p class="footer-title">备案</p> <p>提供免费备案服务</p> </a> </li> <li> <a href="https://www.huaweicloud.com/service/professionalservices.html" bi_name="专业服务" target="_blank"> <i class="footer-icon-support lazyload" data-src="https://portal.hc-cdn.com/cnpm-header-and-footer/1.1.0/base/footer-china/components/service/images/vip.svg"></i> <p class="footer-title">专业服务</p> <p>云业务全流程支持</p> </a> </li> <li> <a href="https://www.huaweicloud.com/service/protection.html#section-2" bi_name="退订" target="_blank"> <i class="footer-icon-support lazyload" data-src="https://portal.hc-cdn.com/cnpm-header-and-footer/1.1.0/base/footer-china/components/service/images/unsub.svg"></i> <p class="footer-title">退订</p> <p>享无忧退订服务</p> </a> </li> <li> <a href="https://bbs.huaweicloud.com/suggestion" bi_name="建议反馈" target="_blank"> <i class="footer-icon-support lazyload" data-src="https://portal.hc-cdn.com/cnpm-header-and-footer/1.1.0/base/footer-china/components/service/images/feedback.svg"></i> <p class="footer-title">建议反馈</p> <p>优化改进建议</p> </a> </li> </ul> </div></div> <div id="footer" bi_parent_name="footer" meta-data-adjust-app="hide"> <div class="footer-hots-mb"> <div class="footer-hots-mb-wrapper"> <div class="footer-hots-mb-title">热门产品</div> <ul> <li> <a href="https://www.huaweicloud.com/product/ecs.html" target="_blank">弹性云服务器</a> </li> <li> <a href="https://www.huaweicloud.com/product/obs.html" target="_blank">对象存储服务</a> </li> <li> <a href="https://www.huaweicloud.com/product/gaussdb.html" target="_blank">云数据库 GaussDB</a> </li> </ul> </div></div><div class="footer-nav" meta-data-adjust-app="hide"> <div class="footer-nav-wrapper"> <div class="footer-nav-content"> <a href="https://www.huaweicloud.com/mobile_app/hwapp.html?channel=navigation_right" class="footer-logo"> <span>华为云App</span> </a> <div class="footer-nav-submenus"> <div class="footer-nav-submenus-inner"> <div class="footer-nav-contact"> <div class="footer-nav-contact-phone"> <p class="footer-nav-contact-phone-title">售前咨询热线</p> <a href="https://www.huaweicloud.com/service/contact.html"><span>950808转1</span></a> </div> <ul class="footer-nav-contact-emails"> <li> <div class="footer-nav-contact-emails-item"> <a href="https://console.huaweicloud.com/ticket/?locale=zh-cn#/ticketindex/createIndex">技术服务咨询</a> </div> </li> <li> <div class="footer-nav-contact-emails-item"> <a href="mailto:beian@huaweicloud.com">备案服务</a> <div class="foot-email"> <p> <a href="mailto:beian@huaweicloud.com">beian@huaweicloud.com</a> </p> </div> </div> </li> <li> <div class="footer-nav-contact-emails-item"> <a href="mailto:partner@huaweicloud.com">云商店咨询</a> <div class="foot-email"> <p> <a href="mailto:partner@huaweicloud.com">partner@huaweicloud.com</a> </p> </div> </div> </li> </ul> </div> <div class="footer-nav-download"><a href="https://www.huaweicloud.com/mobile_app/api_page/appv2/app_download.html?channel=official"><i></i>下载华为云App</a></div> <p class="footer-nav-contact-title">关注我们</p> <dl class="footer-nav-about"> <dt>关注华为云</dt> <dd class="footer-nav-about-dd-mb"> <a class="footer-nav-submenus-link footer-nav-submenus-link-phone" href="tel:4000955988"> <i class="footer-icon-phone"></i> <p>4000 955 988</p> <p>950808</p> </a> </dd> <dd> <a class="footer-nav-submenus-link weixin-sh"> <i class="svgicon lazyload" data-src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/%E7%BB%84%E4%BB%B6%E9%AA%8C%E8%AF%81/pep-common-footer/1619165229378039259.svg"></i> <p>华为云微信</p> <div class="footer-nav-submenus-qr qr-wechat"> <span class="lazyload" data-src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/web_resoure/cms/static/v2_resources/images/global/footer/weixin-mobile.png" data-qr="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/commons/web_resoure/cms/static/v2_resources/images/global/footer/weixin-mobile.png" data-text="长按/截图保存，微信识别二维码&lt;br&gt;或者关注公众号“华为云”"></span> <p>扫描二维码</p> </div> </a> </dd> <dd> <a class="footer-nav-submenus-link microapp-sh"> <i class="svgicon lazyload" data-src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/commons/footer/icon-microapp.svg"></i> <p>华为云微信小程序</p> <div class="footer-nav-submenus-qr qr-microapp"> <span class="lazyload" data-src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/commons/footer/qr-microapp.png" data-qr="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/commons/footer/qr-microapp.png" data-text="长按/截图保存，微信识别二维码&lt;br&gt;或者微信搜索“华为云”小程序"></span> <p>华为云微信小程序</p> </div> </a> </dd> <dd> <a class="footer-nav-submenus-link " href="https://weibo.com/p/1006061930559805"> <i class="svgicon lazyload" data-src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/组件验证/pep-common-footer/1619165229391072287.svg"> </i> <p>华为云微博</p> <div class="footer-nav-submenus-qr qr-weibo" href="https://weibo.com/p/1006061930559805"> <span></span> <p>扫描二维码</p> </div> </a> </dd> <dd class="footer-nav-about-dd-app"> <a class="footer-nav-submenus-link hover" id="footer-nav-app" href="https://www.huaweicloud.com/mobile_app/api_page/appv2/app_download.html?channel=official" target="_blank"> <i class="svgicon lazyload" data-src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/yunying/new-header/app.svg"></i> <p>华为云App</p> <div class="footer-nav-submenus-qr qr-app"> <span></span> <p>扫描下载华为云App</p> </div> </a> </dd> </dl> <a href="tel:950808,1" class="footer-nav-contact-icon"><i class="lazyload" data-src="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/%E7%BB%84%E4%BB%B6%E9%AA%8C%E8%AF%81/pep-common-footer/1618990892808034938.svg"></i>售前咨询：<em>950808转1</em></a> <ul class="footer-law-mb"> <li><a href="https://www.huaweicloud.com/declaration/statement.html" target="_blank">法律条文</a> </li> <li><a href="https://www.huaweicloud.com/declaration/sa_prp.html" target="_blank">隐私政策</a></li> </ul> <div class="wx-pop-wrapper"> <div class="wx-pop"> <img class="dbl-lazy loaded"> <p class="wx-info"></p> </div> </div> </div> </div> <div class="footer-nav-menus"> <dl bi_parent_name="关于华为云"> <dt>关于华为云</dt> <dd><a class="footer-link" href="https://www.huaweicloud.com/about/index.html" target="_blank" rel="nofollow">了解华为云</a></dd> <dd><a class="footer-link" href="https://support.huaweicloud.com/what-is.html" target="_blank" rel="nofollow">云计算概念</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/cases.html" target="_blank" rel="nofollow">客户案例</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/securecenter/overallsafety.html" target="_blank" rel="nofollow">信任中心</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/news.html" target="_blank" rel="nofollow">新闻报道</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/about/live.html" target="_blank" rel="nofollow">视频中心</a></dd> </dl> <dl bi_parent_name="热门产品"> <dt>热门产品</dt> <dd><a class="footer-link" href="https://codearts.huaweicloud.com" target="_blank" rel="nofollow">华为云码道代码智能体</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/product/modelarts.html" target="_blank" rel="nofollow"> 华为云魔坊（ModelArts）</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/product/modelarts/studio.html" target="_blank" rel="nofollow">MaaS模型即服务</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/product/agentarts.html" target="_blank" rel="nofollow">智果AgentArts智能体平台</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/product/ecs.html" target="_blank" rel="nofollow">弹性云服务器 ECS</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/product/mysql.html" target="_blank" rel="nofollow">云数据库 RDS for MySQL</a></dd> </dl> <dl bi_parent_name="支持与服务"> <dt>支持与服务</dt> <dd><a class="footer-link" href="https://support.huaweicloud.com/help-tools.html" target="_blank" rel="nofollow">自助服务</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/notice.html" target="_blank" rel="nofollow">服务公告</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/service/supportplans.html" target="_blank" rel="nofollow">支持计划</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/service/contact.html" target="_blank" rel="nofollow">联系我们</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/report/index.html" target="_blank" rel="nofollow">举报中心</a></dd> </dl> <dl bi_parent_name="实用工具"> <dt>实用工具</dt> <dd><a class="footer-link" href="https://developer.huaweicloud.com/tool.html" target="_blank" rel="nofollow">开发工具</a></dd> <dd><a class="footer-link" href="https://www.huaweicloud.com/service/aiassistant.html" target="_blank" rel="nofollow">云宝助手</a></dd> <dd><a class="footer-link" href="https://status.service.huaweicloud.com/#/home" target="_blank" rel="nofollow">云服务健康看板</a></dd> </dl> <dl bi_parent_name="友情链接"> <dt>友情链接</dt> <dd><a class="footer-link" href="https://www.huawei.com/cn/?ic_medium=direct&amp;ic_source=surlent" target="_blank" rel="nofollow">华为官网</a></dd> <dd><a class="footer-link" href="https://consumer.huawei.com/cn/?utm_source=huaweicloud&amp;utm_medium=footer" target="_blank" rel="nofollow">华为消费者业务</a></dd> <dd><a class="footer-link" href="https://developer.huawei.com/consumer/cn/" target="_blank" rel="nofollow">华为开发者联盟</a></dd> <dd><a class="footer-link" href="https://e.huawei.com/cn/" target="_blank" rel="nofollow">华为企业业务</a></dd> <dd><a class="footer-link" href="https://www.vmall.com/index_new.html#cid=92120" target="_blank" rel="nofollow">华为商城</a></dd> </dl> </div> </div> </div></div><div class="footer-copyright-container"> <div class="footer-copyright-wrapper"> <ul class="footer-law"> <li><a class="footer-link" href="https://www.huaweicloud.com/declaration/statement.html" target="_blank" rel="nofollow">法律条文</a></li> <li><a class="footer-link" href="https://www.huaweicloud.com/declaration/sa_prp.html" target="_blank" rel="nofollow">隐私政策</a></li> </ul> <div class="footer-copyright"> <span>©2026 Huaweicloud.com 版权所有</span> <a class="footer-link" href="https://beian.miit.gov.cn/" target="_blank" rel="nofollow">黔ICP备20004760号-14</a> <span>苏B2-20130048号</span> <span>A2.B1.B2-20070312</span> <span></span> <p class="footer-copyright-extra">增值电信业务经营许可证：B1.B2-20200593 | 代理域名注册服务机构：新网、西数</p> </div> <div class="footer-record"> <i class="footer-icon-record1" target="_blank"><a href="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/wangxue/header/yingyezhizhao02.jpg" target="_blank"></a></i> <span><a class="footer-link" href="https://res-static.hc-cdn.cn/cloudbu-site/china/zh-cn/wangxue/header/yingyezhizhao02.jpg" target="_blank">电子营业执照</a></span> <i class="footer-icon-record2"><a href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=52990002000093" target="_blank"></a></i> <span><a class="footer-link" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=52990002000093" target="_blank">贵公网安备 52990002000093号</a></span> </div> </div></div><script>  if (window.screen.width < 1024) {      $('#footer-nav-app').attr('href', $('#footer-nav-app').attr("src-href"));  }</script></div> <script>
+    var originsWhiteList = ['https://www.huaweicloud.com','https://activity.huaweicloud.com','https://support.huaweicloud.com','https://beian.huaweicloud.com'];
+    var currentOrigin = originsWhiteList.includes(window.location.origin)?window.location.origin:'https://www.huaweicloud.com';
+    var customHeader = "";
+    var url = (currentOrigin+"/common/header-footer-china-zh-2023.html");
+    if(customHeader){ url = "https://"+customHeader+".html"; }
+    var $tmpForPEP = document.createElement("div");
+    $.ajax({
+        url: url,
+        async: true,
+        timeout: 10000,
+        success: function(response) {
+            $tmpForPEP.innerHTML = response;
+            // 下拉部分
+            $("#footer").append($tmpForPEP.querySelector("#edit-header-drop").innerHTML);           
+            var scripts = [
+                "https://portal.hc-cdn.com/cpage-pep-header-and-footer-china/2.0.61/header-and-footer-china.umd.js?sttl=3.0.87&ttr=1.2.21",
+                "https://portal.hc-cdn.com/cnpm-global-resources/1.2.21/js/portalLogin.min.js?sttl=3.0.87&ttr=1.2.21"
+            ];
+            for(var i = 0; i < scripts.length; i++) {
+                var script = document.createElement('script');
+                script.type = 'text/javaScript';
+                script.setAttribute('crossorigin','anonymous');
+                script.src = scripts[i];
+                document.getElementsByTagName('body')[0].appendChild(script);
+            }
+        },
+        error: function(response) {
+          var scripts = [
+                "https://portal.hc-cdn.com/cpage-pep-header-and-footer-china/2.0.61/header-and-footer-china.umd.js?sttl=3.0.87&ttr=1.2.21",
+                "https://portal.hc-cdn.com/cnpm-global-resources/1.2.21/js/portalLogin.min.js?sttl=3.0.87&ttr=1.2.21"
+            ]
+            for(var i = 0; i < scripts.length; i++) {
+                var script = document.createElement('script');
+                script.type = 'text/javaScript';
+                script.setAttribute('crossorigin','anonymous');
+                script.src = scripts[i];
+                document.getElementsByTagName('body')[0].appendChild(script);
+            }
+        }
+    });
+
+
+    if (!window.gConfig) {
+        window.gConfig = {}
+    }
+    window.gConfig.isApp = /galaxy/i.test(navigator.userAgent) && window.galaxy;
+    // 初始化全局变量
+    var jsonParamInit = {}
+    var jsonParamView = {}
+    var jsonParamEvent = {}
+    jsonParamInit['UserAccount'] = 'host'
+    jsonParamEvent['rec_account'] = getUaCookie('ua')
+    jsonParamView['rec_account'] = getUaCookie('ua')
+    var portalDomain = 'https://portal.huaweicloud.com',
+    ssoDomain = 'https://auth.huaweicloud.com'
+    var isVerified = false
+    var isLogin = false
+    var totalMsg = 0;
+    function getUaCookie(c_name) {
+        if (document.cookie.length > 0) {
+            var c_start = document.cookie.indexOf(c_name + '=')
+            if (c_start != -1) {
+            c_start = c_start + c_name.length + 1
+            var c_end = document.cookie.indexOf(';', c_start)
+            if (c_end == -1) c_end = document.cookie.length
+            return decodeURI(document.cookie.substring(c_start, c_end))
+            }
+        }
+        return ''
+    }
+</script> <div class="video-div"> <div class="video-modal-wrapper"> <div class="video-close-btn"></div> </div> </div> <div id="videoDiv" style="z-index: 9999; display: none; position: relative"> <div id="videobg" style=" position: absolute; background: #000; opacity: 0.3; filter: progid:DXImageTransform.Microsoft.Alpha(opacity=30); "></div> <div id="videoplayerDiv" style="position: absolute"> <div id="videoContainer" style="width: 700px; height: 500px; background-color: black"> <span id="closeBtn"><img src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/static/close_grey_1.svg?sttl=3.0.87" alt="" height="22" width="22" onclick="closeVideo()" /></span> <div id="videoplayer" style="height: 500px; width: 700px"></div> </div> </div> </div> <script type="text/javascript">
+        var videoDomain = '//bbs-video.huaweicloud.com';
+
+        var _videoProtocol = 'https:' == document.location.protocol ? 'https:' : 'http:';
+        var tag2urlMap = [];
+        var loading = false;
+        var isLogin = false;
+        function play(video_url, video_desc, domain) {
+            if (/(\.mp4|\.mu38)/.test(video_url)) {
+                _play(video_url, video_desc, domain);
+            } else {
+                if (tag2urlMap[video_url]) _play(tag2urlMap[video_url], video_desc, domain);
+                else {
+                    if (loading) return;
+                    loading = true;
+                    $.ajax({
+                        type: 'GET',
+                        url: 'https://bbs.huaweicloud.com/api/video/out-play?tag=' + video_url,
+                        dataType: 'text',
+                        success: function (result) {
+                            loading = false;
+                            tag2urlMap[video_url] = result;
+                            _play(tag2urlMap[video_url], video_desc, domain);
+                        },
+                        error: function () {
+                            loading = false;
+                        },
+                    });
+                }
+            }
+        }
+        function _play(video_url, video_desc, domain) {
+            var reg = RegExp(/bbs/);
+            var tmp = video_url;
+            var contentAsset = '/content/dam/';
+            var bbsAsset = '/FileServer/getFile/';
+            if (!video_url.match(reg)) {
+                if (video_url.match(contentAsset) || video_url.match(bbsAsset)) {
+                    tmp = video_url;
+                } else if (domain) {
+                    var tmp = _videoProtocol + domain + video_url;
+                } else {
+                    var tmp = _videoProtocol + videoDomain + video_url;
+                }
+            }
+            tmp = tmp.replace(/m3u8/, 'mp4');
+            tmp = tmp.replace(/bbs\.huaweicloud\.com/, 'bbs-video.huaweicloud.com');
+
+            var ua = navigator && navigator.userAgent;
+
+            var win_width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            var obj = '#videoplayer';
+            if (win_width < 700) {
+                $('#videoContainer')
+                    .width(win_width)
+                    .height((win_width * 3) / 4);
+                $(obj)
+                    .width(win_width)
+                    .height((win_width * 3) / 4);
+            }
+            var h = $(obj).height();
+            var w = $(obj).width();
+
+            $(obj).append(
+                '<video src="' +
+                tmp +
+                '" height="' +
+                h +
+                '" width="' +
+                w +
+                '" autoplay="autoplay" controls="controls" controlslist="nodownload"></video>',
+            );
+            if($.fn.videoPointEvent) { //videoPointEvent和empujarPointEvent为新增埋点事件
+                var el = $('#videoplayer').find('video')[0];
+                $.fn.videoPointEvent(el);
+            }
+
+            var userAgent = navigator.userAgent;
+            var isOpera = userAgent.indexOf('Opera') > -1;
+            var height = document.body.offsetHeight;
+            $('#videobg').css('width', $(window).width());
+            $('#videobg').css('height', height);
+            $('#videobg').css('top', -height);
+            $('#videobg').css('left', '0px');
+            $('#videoplayerDiv').css('left', ($(window).width() - $('#videoplayer').width()) / 2);
+            $('#videoplayerDiv').css(
+                'top',
+                ($(window).height() - $('#videoplayer').height()) / 2 + $(window).scrollTop() - height,
+            );
+            $('#videoDiv').show();
+        }
+
+        function closeVideo() {
+            if($.fn.empujarPointEvent) {
+                $.fn.empujarPointEvent();
+            }
+            if (!!window.ActiveXObject || 'ActiveXObject' in window) {
+                $('#videoplayer').remove();
+                $('#closeBtn').append('<div id="videoplayer" style="height:500px;width:700px;">');
+            } else {
+                $('#videoplayer').html('');
+            }
+            $('#videoDiv').hide();
+        }
+    </script> <img src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/zh-cn/support/resource/framework/v3/images/support-doc-revision-note.svg" id="support-hidden-image-note" alt="" hidden="" /> <img src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/zh-cn/support/resource/framework/v3/images/support-doc-revision-warning.svg" id="support-hidden-image-warning" alt="" hidden="" /> <img src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/zh-cn/support/resource/framework/v3/images/support-doc-revision-danger.svg" id="support-hidden-image-danger" alt="" hidden="" /> <img src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/zh-cn/support/resource/framework/v3/images/support-doc-revision-notice.svg" id="support-hidden-image-notice" alt="" hidden="" /> <img src="https://res-static.hc-cdn.cn/aem/content/dam/cloudbu-site/archive/china/zh-cn/support/resource/framework/v3/images/support-doc-revision-caution.svg" id="support-hidden-image-caution" alt="" hidden="" /> </body> </html> 

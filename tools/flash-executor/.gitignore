@@ -1,0 +1,6 @@
+settings.json
+node_modules/
+artifacts/
+jobs/
+locks/
+*.log
