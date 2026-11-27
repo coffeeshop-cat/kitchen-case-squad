@@ -155,6 +155,16 @@ input[type="file"]:focus-visible + * { outline: 2px solid var(--brick); }
 
 .reset { margin-top: 20px; }
 
+/* 急救与结案 */
+.rescue-block, .close-block { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 14px; }
+.rescue-block input[type="file"], .close-block input {
+  display: block; width: 100%; margin: 8px 0; padding: 7px 9px;
+  border: 1px solid var(--line); border-radius: var(--radius); font: inherit; background: #fff;
+}
+.rescue-result { margin-top: 10px; padding: 10px 12px; background: var(--green-soft); border-radius: var(--radius); }
+.agent-redteam cite { color: var(--brick); }
+.agent-evidence cite { color: var(--green-deep); }
+
 /* 右栏会诊 */
 .log { display: flex; flex-direction: column; gap: 16px; max-height: 60vh; overflow-y: auto; padding-right: 4px; }
 .round-label {

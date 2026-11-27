@@ -18,13 +18,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from starlette.staticfiles import StaticFiles
 
 ALLOWED_PHOTO_TYPES = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}
 MAX_PHOTO_BYTES = 5 * 1024 * 1024
+ALLOWED_AGENT_NAMES = {"证物官", "主厨", "军师", "管家", "红队", "主持人"}
 
 MEAL_PLAN_PROVIDER = os.environ.get("MEAL_PLAN_PROVIDER", "demo").strip().lower()
 if MEAL_PLAN_PROVIDER not in ("demo", "agentarts"):
@@ -41,6 +42,7 @@ class Store:
     cases: Dict[str, dict] = field(default_factory=dict)
     sse_queues: Dict[str, list] = field(default_factory=dict)  # case_id -> list[dict]
     in_flight: set = field(default_factory=set)  # 正在确认中的 case_id
+    case_laws: List[dict] = field(default_factory=list)  # 结案后写入的判例
 
 
 STORE = Store()
@@ -52,6 +54,12 @@ class ItemIn(BaseModel):
     qty: float
     unit: str = Field(min_length=1)
     state: str = "review"  # review / usable / discard
+    expiry: Optional[str] = None
+
+
+class ItemPatch(BaseModel):
+    name: Optional[str] = None
+    qty: Optional[float] = None
     expiry: Optional[str] = None
 
 
@@ -83,6 +91,10 @@ def new_case(source: str, items_raw: List[dict], mode: str = MEAL_PLAN_PROVIDER)
         "events": [],
         "verdict": None,
         "completed_steps": [],
+        "rescue_count": 0,
+        "rescue_history": [],
+        "closed": False,
+        "case_law_id": None,
     }
     with STORE.lock:
         STORE.cases[cid] = case
@@ -100,6 +112,17 @@ def _parse_iso_date(s):
         return _dt.date.fromisoformat(s)
     except (ValueError, TypeError):
         return None
+
+
+async def read_photo(photo: UploadFile) -> bytes:
+    """校验照片类型/大小；Demo 阶段只做校验，不落盘、不外传。"""
+    ctype = (photo.content_type or "").lower()
+    if ctype not in ALLOWED_PHOTO_TYPES:
+        raise HTTPException(status_code=400, detail="仅支持 JPG/PNG/WebP 照片")
+    data = await photo.read(MAX_PHOTO_BYTES + 1)
+    if len(data) > MAX_PHOTO_BYTES:
+        raise HTTPException(status_code=400, detail="照片不能超过 5 MB")
+    return data
 
 
 def normalize_items(payload: List[ItemIn]) -> List[dict]:
@@ -257,6 +280,51 @@ def build_verdict(items: List[dict]):
     return verdict, events
 
 
+def decorate_verdict(verdict: dict) -> dict:
+    """补齐 timetable / warnings / tradeoff，demo 与云端共用。"""
+    verdict.setdefault("timetable", [])
+    verdict.setdefault("warnings", [])
+    verdict.setdefault("tradeoff", None)
+    if verdict.get("status") != "ready":
+        return verdict
+
+    steps = verdict.get("steps") or []
+    if not verdict["timetable"] and steps:
+        cursor = _dt.datetime.now() + _dt.timedelta(minutes=7)
+        timetable = []
+        for index, step in enumerate(steps, start=1):
+            timetable.append(
+                {
+                    "at": cursor.strftime("%H:%M"),
+                    "action": step["title"],
+                    "step_n": index,
+                }
+            )
+            cursor += _dt.timedelta(minutes=float(step.get("minutes", 0)))
+        verdict["timetable"] = timetable
+
+    if not verdict["warnings"]:
+        long_steps = [
+            str(index)
+            for index, step in enumerate(steps, start=1)
+            if float(step.get("minutes", 0)) >= 5
+        ]
+        if long_steps:
+            verdict["warnings"].append(
+                {
+                    "at": None,
+                    "message": f"第 {'、'.join(long_steps)} 步耗时较长，先把下一步用料备好",
+                    "severity": 1,
+                }
+            )
+
+    if not verdict["tradeoff"]:
+        verdict["tradeoff"] = (
+            f"只做{verdict.get('title', '这一道菜')}，换取 {verdict.get('duration_min')} 分钟内上桌"
+        )
+    return verdict
+
+
 # ---------------------------------------------------------------------------
 # 云端 agentarts
 # ---------------------------------------------------------------------------
@@ -277,10 +345,10 @@ def plan_with_agentarts(planner, items: List[dict]):
         if type(e).__name__ == "AgentArtsError":
             raise
         raise RuntimeError(f"云端规划调用失败: {e}") from e
-    # 真 Agent 流仅保留主厨/管家发言
+    # 云端工作流可以返回 2–6 个角色；只保留白名单内的结构化发言
     events = [
         ev for ev in events
-        if ev.get("type") != "agent_speak" or ev.get("agent") in ("主厨", "管家")
+        if ev.get("type") == "agent_speak" and ev.get("agent") in ALLOWED_AGENT_NAMES
     ]
     return verdict, events
 
@@ -318,12 +386,7 @@ def create_app(provider: str = MEAL_PLAN_PROVIDER) -> FastAPI:
     @app.post("/cases")
     async def create_case(photo: Optional[UploadFile] = File(default=None)):
         if photo is not None:
-            ctype = (photo.content_type or "").lower()
-            if ctype not in ALLOWED_PHOTO_TYPES:
-                raise HTTPException(status_code=400, detail="仅支持 JPG/PNG/WebP 照片")
-            data = await photo.read(MAX_PHOTO_BYTES + 1)
-            if len(data) > MAX_PHOTO_BYTES:
-                raise HTTPException(status_code=400, detail="照片不能超过 5 MB")
+            await read_photo(photo)
             # 照片阶段仍在本地：不读取内容、不保存、不外传，仅生成一张空白待核对清单，
             # 由用户根据照片逐行添加食材。
             items_raw = []
@@ -338,6 +401,49 @@ def create_app(provider: str = MEAL_PLAN_PROVIDER) -> FastAPI:
             if case is None:
                 raise HTTPException(status_code=404, detail="案例不存在")
             return dict(case)
+
+    @app.patch("/items/{item_id}")
+    def patch_item(item_id: str, patch: ItemPatch):
+        """低置信度证物的人工纠正入口；只能在确认前改。"""
+        with STORE.lock:
+            found_case = None
+            found_item = None
+            for case in STORE.cases.values():
+                for item in case["items"]:
+                    if item.get("id") == item_id:
+                        found_case, found_item = case, item
+                        break
+                if found_item is not None:
+                    break
+
+            if found_item is None:
+                raise HTTPException(status_code=404, detail="证物不存在")
+            if found_case["status"] != "review":
+                raise HTTPException(status_code=409, detail="只能在确认前修改证物")
+
+            if patch.name is not None:
+                name = patch.name.strip()
+                if not name:
+                    raise HTTPException(status_code=400, detail="食材名称不能为空")
+                found_item["name"] = name
+
+            if patch.qty is not None:
+                if not math.isfinite(patch.qty) or patch.qty <= 0:
+                    raise HTTPException(status_code=400, detail="数量必须为正数")
+                found_item["qty"] = patch.qty
+
+            if patch.expiry is not None:
+                if patch.expiry.strip() == "":
+                    found_item["expiry"] = None
+                else:
+                    parsed = _parse_iso_date(patch.expiry.strip())
+                    if parsed is None:
+                        raise HTTPException(status_code=400, detail="到期日期格式应为 YYYY-MM-DD")
+                    found_item["expiry"] = parsed.isoformat()
+                    if parsed < _dt.date.today():
+                        found_item["state"] = "discard"
+
+            return dict(found_item)
 
     @app.post("/cases/{cid}/confirm")
     def confirm(cid: str, payload: ConfirmIn):
@@ -367,6 +473,8 @@ def create_app(provider: str = MEAL_PLAN_PROVIDER) -> FastAPI:
                     raise HTTPException(status_code=502, detail="云端规划暂不可用，可稍后重试")
             else:
                 verdict, events = build_verdict(normalized)
+
+            verdict = decorate_verdict(verdict)
 
             # 一次提交：items/status/verdict/events/SSE；成功前保持占用，云端失败时不落库
             with STORE.lock:
@@ -399,6 +507,135 @@ def create_app(provider: str = MEAL_PLAN_PROVIDER) -> FastAPI:
                 case["completed_steps"].append(n)
                 case["completed_steps"].sort()
             return dict(case)
+
+    @app.post("/cases/{cid}/rescue")
+    async def rescue(cid: str, photo: UploadFile = File(...)):
+        """第二幕急救（Demo 版）：只做状态校验和规则建议，不解析照片内容。"""
+        await read_photo(photo)
+        with STORE.lock:
+            case = STORE.cases.get(cid)
+            if case is None:
+                raise HTTPException(status_code=404, detail="案例不存在")
+            if case["status"] != "planned" or case["verdict"] is None:
+                raise HTTPException(status_code=409, detail="案例尚未形成计划")
+            if case.get("closed"):
+                raise HTTPException(status_code=409, detail="案例已结案")
+
+            count = int(case.get("rescue_count", 0))
+            if count >= 2:
+                return {
+                    "diagnosis": "已经急救两次，再救下去风险更高，建议止损。",
+                    "options": [
+                        {"id": "c", "action": "止损：盛出可吃部分，配现有小菜", "risk": "低"}
+                    ],
+                    "rescue_count": count,
+                    "stoploss_only": True,
+                }
+
+            done = len(case.get("completed_steps") or [])
+            if done == 0:
+                diagnosis = "还没开火，先按第 1 步来，别急着改方案。"
+                options = [
+                    {"id": "a", "action": "先按第 1 步备料，确认火力和锅具", "risk": "低"},
+                    {"id": "b", "action": "改做更简单的炒饭/盖饭", "risk": "中"},
+                    {"id": "c", "action": "止损：盛出现有食材，配小菜", "risk": "低"},
+                ]
+            else:
+                diagnosis = f"已做到第 {done} 步，先判断是火候、水量还是调味问题。"
+                options = [
+                    {"id": "a", "action": "补少量热水，盖盖焖 2–3 分钟", "risk": "低"},
+                    {"id": "b", "action": "改做炒饭/盖饭，把当前食材重新组合", "risk": "中"},
+                    {"id": "c", "action": "止损：盛出可吃部分，配现有小菜", "risk": "低"},
+                ]
+
+            case["rescue_count"] = count + 1
+            case.setdefault("rescue_history", []).append(
+                {"step_index": done, "diagnosis": diagnosis, "options": options}
+            )
+            event = _speak(3, "军师", f"急救：{diagnosis}")
+            case["events"].append(event)
+            STORE.sse_queues.setdefault(cid, []).append(event)
+            return {
+                "diagnosis": diagnosis,
+                "options": options,
+                "rescue_count": case["rescue_count"],
+                "stoploss_only": False,
+            }
+
+    @app.post("/cases/{cid}/close")
+    async def close_case(
+        cid: str,
+        empty_plate: UploadFile = File(...),
+        actual_minutes: Optional[float] = Form(default=None),
+        failures: Optional[str] = Form(default=None),
+        empty: bool = Form(default=True),
+    ):
+        """第四幕结案（Demo 版）：写一条判例、把已用食材标为 consumed。"""
+        await read_photo(empty_plate)
+        if actual_minutes is not None and (
+            not math.isfinite(actual_minutes) or actual_minutes <= 0
+        ):
+            raise HTTPException(status_code=400, detail="实际时长必须为正数")
+
+        with STORE.lock:
+            case = STORE.cases.get(cid)
+            if case is None:
+                raise HTTPException(status_code=404, detail="案例不存在")
+            if case["status"] != "planned" or case["verdict"] is None:
+                raise HTTPException(status_code=409, detail="案例尚未形成计划")
+            if case.get("closed"):
+                raise HTTPException(status_code=409, detail="案例已结案")
+
+            verdict = case["verdict"]
+            used_ids = {u.get("id") for u in verdict.get("used_items", [])}
+            for item in case["items"]:
+                if item.get("id") in used_ids:
+                    item["state"] = "consumed"
+
+            raw_failures = (failures or "").replace("；", ";")
+            failure_list = [part.strip() for part in raw_failures.split(";") if part.strip()]
+            if not empty and not failure_list:
+                failure_list.append("未空盘")
+
+            law_id = "law-" + uuid.uuid4().hex[:8]
+            law = {
+                "id": law_id,
+                "created_at": _dt.datetime.now().isoformat(timespec="seconds"),
+                "title": verdict.get("title"),
+                "items": [
+                    item["name"] for item in case["items"] if item.get("id") in used_ids
+                ],
+                "used_items": verdict.get("used_items", []),
+                "duration_min": verdict.get("duration_min"),
+                "actual_minutes": actual_minutes,
+                "empty_plate": bool(empty),
+                "failures": failure_list,
+                "rescued": int(case.get("rescue_count", 0)) > 0,
+                "human_verified": True,
+            }
+            STORE.case_laws.append(law)
+
+            case["closed"] = True
+            case["case_law_id"] = law_id
+            case["status"] = "closed"
+            changes = [
+                {
+                    "type": "inventory_change",
+                    "item": item["name"],
+                    "from": "usable",
+                    "to": "consumed",
+                }
+                for item in case["items"]
+                if item.get("id") in used_ids
+            ]
+            case["events"].extend(changes)
+            STORE.sse_queues.setdefault(cid, []).extend(changes)
+            return {"case_law_id": law_id, "case": dict(case)}
+
+    @app.get("/case-laws")
+    def list_case_laws():
+        with STORE.lock:
+            return {"items": list(STORE.case_laws)}
 
     @app.get("/cases/{cid}/events")
     async def sse(cid: str):

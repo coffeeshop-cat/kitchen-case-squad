@@ -1,13 +1,26 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { createCase, getCase, confirmCase, updateStep, openEventStream, getHealth } from './api.js';
+import { createCase, getCase, confirmCase, updateStep, openEventStream, getHealth, rescueCase, closeCase } from './api.js';
 
 const AGENT_LABEL = {
-  planner: '食材侦探',
-  chef: '主厨顾问',
+  证物官: '证物官',
+  主厨: '主厨',
+  军师: '军师',
+  管家: '管家',
+  红队: '红队',
+  主持人: '主持人',
+  planner: '证物官',
+  chef: '主厨',
   buyer: '采购员',
   timekeeper: '计时员'
 };
-const AGENT_LIST = ['planner', 'chef', 'buyer', 'timekeeper'];
+const AGENT_CLASS = {
+  证物官: 'evidence',
+  主厨: 'chef',
+  军师: 'strategist',
+  管家: 'quartermaster',
+  红队: 'redteam',
+  主持人: 'host'
+};
 
 function unitQty(item) {
   return `${item.qty}${item.unit}`;
@@ -63,6 +76,14 @@ export default function App() {
   const [error, setError] = useState(null);
   const [recoveredSteps, setRecoveredSteps] = useState([]);
   const [ticking, setTicking] = useState([]);
+  const [rescueFile, setRescueFile] = useState(null);
+  const [rescueResult, setRescueResult] = useState(null);
+  const [rescueBusy, setRescueBusy] = useState(false);
+  const [plateFile, setPlateFile] = useState(null);
+  const [actualMinutes, setActualMinutes] = useState('');
+  const [failures, setFailures] = useState('');
+  const [closeResult, setCloseResult] = useState(null);
+  const [closeBusy, setCloseBusy] = useState(false);
   const closeRef = useRef(null);
   const logRef = useRef(null);
   const previewBlob = useRef(null);
@@ -119,6 +140,15 @@ export default function App() {
     setItems((prev) => [...prev, { id, name: '', qty: 1, unit: '', state: 'usable', expiry: null }]);
   }
 
+  function clearLoopState() {
+    setRescueFile(null);
+    setRescueResult(null);
+    setPlateFile(null);
+    setActualMinutes('');
+    setFailures('');
+    setCloseResult(null);
+  }
+
   function pickFile(e) {
     const f = e.target.files && e.target.files[0];
     if (!f) return;
@@ -133,6 +163,7 @@ export default function App() {
     setError(null);
     setEvents([]);
     setVerdict(null);
+    clearLoopState();
     try {
       const c = await createCase(photo || null);
       setCaseData(c);
@@ -184,6 +215,7 @@ export default function App() {
         setVerdict(null);
       } else {
         setMode('planned');
+        clearLoopState();
         // 快照与 SSE 会重放全量发言：流会带回完整 events，不预填同一数组，避免重复渲染
         setEvents([]);
         startStream(c);
@@ -207,6 +239,39 @@ export default function App() {
     }
   }
 
+  async function handleRescue() {
+    if (!caseData || !rescueFile) return;
+    setRescueBusy(true);
+    setError(null);
+    try {
+      setRescueResult(await rescueCase(caseData.id, rescueFile));
+    } catch (e) {
+      setError(`急救失败：${e.message}`);
+    } finally {
+      setRescueBusy(false);
+    }
+  }
+
+  async function handleClose() {
+    if (!caseData || !plateFile) return;
+    setCloseBusy(true);
+    setError(null);
+    try {
+      const result = await closeCase(caseData.id, plateFile, {
+        actualMinutes,
+        failures,
+        empty: true
+      });
+      setCloseResult(result);
+      setCaseData(result.case);
+      setRecoveredSteps(result.case.completed_steps || []);
+    } catch (e) {
+      setError(`结案失败：${e.message}`);
+    } finally {
+      setCloseBusy(false);
+    }
+  }
+
   function reset() {
     if (closeRef.current) closeRef.current();
     closeRef.current = null;
@@ -216,6 +281,7 @@ export default function App() {
     setVerdict(null);
     setRecoveredSteps([]);
     setStreamState('idle');
+    clearLoopState();
     setMode('start');
     setError(null);
     setFile(null);
@@ -372,7 +438,69 @@ export default function App() {
                   );
                 })}
               </ol>
+              {verdict.timetable?.length > 0 && (
+                <>
+                  <h2>时序</h2>
+                  <ul className="used-items">
+                    {verdict.timetable.map((slot) => (
+                      <li key={`${slot.step_n}-${slot.at}`}>{slot.at} · {slot.action}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {verdict.warnings?.length > 0 && (
+                <>
+                  <h2>预警</h2>
+                  <ul className="used-items">
+                    {verdict.warnings.map((warning, index) => (
+                      <li key={index}>{warning.message}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              {verdict.tradeoff && <p className="muted small">取舍：{verdict.tradeoff}</p>}
               {verdict.note && <p className="muted small">{verdict.note}</p>}
+
+              <div className="rescue-block">
+                <h2>翻车了？</h2>
+                <p className="muted small">拍一张锅里的照片，让军师给三条路。</p>
+                <input type="file" accept="image/jpeg,image/png,image/webp"
+                  onChange={(e) => setRescueFile(e.target.files?.[0] || null)} />
+                <button type="button" className="btn-secondary" disabled={!rescueFile || rescueBusy} onClick={handleRescue}>
+                  {rescueBusy ? '急救中…' : '发起急救'}
+                </button>
+                {rescueResult && (
+                  <div className="rescue-result">
+                    <p>{rescueResult.diagnosis}</p>
+                    <ul className="used-items">
+                      {rescueResult.options.map((option) => (
+                        <li key={option.id}>{option.action}（风险：{option.risk}）</li>
+                      ))}
+                    </ul>
+                    {rescueResult.stoploss_only && <p className="muted small">已到急救上限，只能止损。</p>}
+                  </div>
+                )}
+              </div>
+
+              <div className="close-block">
+                <h2>吃完结案</h2>
+                {caseData?.closed ? (
+                  <p className="muted small">已结案，判例编号 {caseData.case_law_id}。</p>
+                ) : (
+                  <>
+                    <input type="file" accept="image/jpeg,image/png,image/webp"
+                      onChange={(e) => setPlateFile(e.target.files?.[0] || null)} />
+                    <input type="number" min="1" placeholder="实际用时（分钟）"
+                      value={actualMinutes} onChange={(e) => setActualMinutes(e.target.value)} />
+                    <input type="text" placeholder="翻车点，用分号分隔（可选）"
+                      value={failures} onChange={(e) => setFailures(e.target.value)} />
+                    <button type="button" className="btn-primary" disabled={!plateFile || closeBusy} onClick={handleClose}>
+                      {closeBusy ? '结案中…' : '结案并写判例'}
+                    </button>
+                    {closeResult && <p className="muted small">判例已写入：{closeResult.case_law_id}</p>}
+                  </>
+                )}
+              </div>
             </div>
           )}
 
@@ -390,7 +518,7 @@ export default function App() {
               <div key={round} className="round">
                 <p className="round-label">第 {round} 轮</p>
                 {evs.map((ev, i) => (
-                  <blockquote key={i} className={`speak agent-${ev.agent}`}>
+                  <blockquote key={i} className={`speak agent-${AGENT_CLASS[ev.agent] || 'unknown'}`}>
                     <cite>{AGENT_LABEL[ev.agent] || ev.agent}</cite>
                     <p>{ev.text}</p>
                   </blockquote>

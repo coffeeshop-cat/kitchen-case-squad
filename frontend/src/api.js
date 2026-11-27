@@ -49,6 +49,23 @@ export function updateStep(id, n, payload) {
   });
 }
 
+export function rescueCase(id, photoFile) {
+  const fd = new FormData();
+  fd.append('photo', photoFile);
+  return apiJson(`/cases/${encodeURIComponent(id)}/rescue`, { method: 'POST', body: fd });
+}
+
+export function closeCase(id, plateFile, payload = {}) {
+  const fd = new FormData();
+  fd.append('empty_plate', plateFile);
+  if (payload.actualMinutes != null && payload.actualMinutes !== '') {
+    fd.append('actual_minutes', String(payload.actualMinutes));
+  }
+  if (payload.failures) fd.append('failures', payload.failures);
+  if (payload.empty != null) fd.append('empty', String(payload.empty));
+  return apiJson(`/cases/${encodeURIComponent(id)}/close`, { method: 'POST', body: fd });
+}
+
 export function openEventStream({ id, onEvent, onVerdict, onOpen, onError, onDone }) {
   const es = new EventSource(`/cases/${encodeURIComponent(id)}/events`);
   let closed = false;
