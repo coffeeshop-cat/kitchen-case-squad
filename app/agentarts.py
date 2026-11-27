@@ -34,6 +34,8 @@ SERVINGS_MIN, SERVINGS_MAX = 1, 20
 ALLOWED_STATUS = ("ready", "insufficient")
 ALLOWED_AUDIT = ("pass", "reject")
 ALLOWED_UNITS_LIMIT = 40  # 单位字符串长度上限
+ALLOWED_AGENTS = {"证物官", "主厨", "军师", "管家", "红队", "主持人"}
+MAX_EVENT_TEXT = 300
 
 NOTE_BASE = "基础调味料（盐、油、酱油）按厨房常备假定，不计入采购；用量为云端工作流给出的计划值。"
 
@@ -304,6 +306,33 @@ class AgentArtsPlanner:
     # 对外入口
     # ------------------------------------------------------------------
 
+    @staticmethod
+    def _validate_events(raw: Any) -> List[dict]:
+        """校验云端可选返回的多角色发言；不合法直接报错，不静默丢弃。"""
+        if raw is None:
+            return []
+        if not isinstance(raw, list):
+            raise _err("events 必须是数组")
+        events: List[dict] = []
+        for ev in raw:
+            if not isinstance(ev, dict) or ev.get("type") != "agent_speak":
+                raise _err("events 仅支持 agent_speak")
+            agent = _nonempty_str(ev.get("agent"), 20)
+            text = _nonempty_str(ev.get("text"), MAX_EVENT_TEXT)
+            round_no = ev.get("round")
+            if (
+                agent not in ALLOWED_AGENTS
+                or text is None
+                or isinstance(round_no, bool)
+                or not isinstance(round_no, int)
+                or not (1 <= round_no <= 3)
+            ):
+                raise _err("events 字段非法")
+            events.append(
+                {"type": "agent_speak", "round": round_no, "agent": agent, "text": text}
+            )
+        return events
+
     def plan(self, items: List[dict]) -> Tuple[dict, List[dict]]:
         usable = [it for it in items if it.get("state") == "usable"]
         if not usable:
@@ -319,22 +348,25 @@ class AgentArtsPlanner:
             }, []
         data = self._post(self._build_case_json(usable))
         stock = {(it["id"], it["unit"]): it for it in usable}
-        verdict, reason = self._validate_business(self._unwrap(data), stock)
+        biz = self._unwrap(data)
+        verdict, reason = self._validate_business(biz, stock)
+        events = self._validate_events(biz.get("events"))
 
-        chef = (
-            f"按计划制作「{verdict['title']}」，用时约 {verdict['duration_min']} 分钟。"
-            if verdict["status"] == "ready"
-            else f"「{reason}」，本次不出菜谱。"
-        )
-        butler = (
-            f"计划 {verdict['servings']} 人份，涉及 {len(verdict['used_items'])} 项食材。"
-            if verdict["status"] == "ready"
-            else "请人工补充食材后再试。"
-        )
-        events = [
-            {"type": "agent_speak", "round": 1, "agent": "主厨", "text": chef},
-            {"type": "agent_speak", "round": 2, "agent": "管家", "text": butler},
-        ]
+        if not events:
+            chef = (
+                f"按计划制作「{verdict['title']}」，用时约 {verdict['duration_min']} 分钟。"
+                if verdict["status"] == "ready"
+                else f"「{reason}」，本次不出菜谱。"
+            )
+            butler = (
+                f"计划 {verdict['servings']} 人份，涉及 {len(verdict['used_items'])} 项食材。"
+                if verdict["status"] == "ready"
+                else "请人工补充食材后再试。"
+            )
+            events = [
+                {"type": "agent_speak", "round": 1, "agent": "主厨", "text": chef},
+                {"type": "agent_speak", "round": 2, "agent": "管家", "text": butler},
+            ]
         return verdict, events
 
 
