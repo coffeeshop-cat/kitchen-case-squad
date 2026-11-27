@@ -81,6 +81,27 @@ class ApiFlowTests(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 409)
 
+    def test_patch_item_only_before_confirm(self):
+        case = self.client.post("/cases").json()
+        cid = case["id"]
+
+        patched = self.client.patch(
+            "/items/i1", json={"name": "土鸡蛋", "qty": 2, "expiry": "2099-01-01"}
+        )
+        self.assertEqual(patched.status_code, 200)
+        self.assertEqual(patched.json()["name"], "土鸡蛋")
+        self.assertEqual(patched.json()["qty"], 2)
+
+        invalid = self.client.patch("/items/i1", json={"qty": 0})
+        self.assertEqual(invalid.status_code, 400)
+
+        items = self.client.get(f"/cases/{cid}").json()["items"]
+        confirmed = self.client.post(f"/cases/{cid}/confirm", json={"items": items})
+        self.assertEqual(confirmed.status_code, 200)
+
+        locked = self.client.patch("/items/i1", json={"qty": 1})
+        self.assertEqual(locked.status_code, 409)
+
 
 if __name__ == "__main__":
     unittest.main()

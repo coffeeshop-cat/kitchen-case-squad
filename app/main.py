@@ -57,6 +57,12 @@ class ItemIn(BaseModel):
     expiry: Optional[str] = None
 
 
+class ItemPatch(BaseModel):
+    name: Optional[str] = None
+    qty: Optional[float] = None
+    expiry: Optional[str] = None
+
+
 class ConfirmIn(BaseModel):
     items: List[ItemIn]
 
@@ -395,6 +401,49 @@ def create_app(provider: str = MEAL_PLAN_PROVIDER) -> FastAPI:
             if case is None:
                 raise HTTPException(status_code=404, detail="案例不存在")
             return dict(case)
+
+    @app.patch("/items/{item_id}")
+    def patch_item(item_id: str, patch: ItemPatch):
+        """低置信度证物的人工纠正入口；只能在确认前改。"""
+        with STORE.lock:
+            found_case = None
+            found_item = None
+            for case in STORE.cases.values():
+                for item in case["items"]:
+                    if item.get("id") == item_id:
+                        found_case, found_item = case, item
+                        break
+                if found_item is not None:
+                    break
+
+            if found_item is None:
+                raise HTTPException(status_code=404, detail="证物不存在")
+            if found_case["status"] != "review":
+                raise HTTPException(status_code=409, detail="只能在确认前修改证物")
+
+            if patch.name is not None:
+                name = patch.name.strip()
+                if not name:
+                    raise HTTPException(status_code=400, detail="食材名称不能为空")
+                found_item["name"] = name
+
+            if patch.qty is not None:
+                if not math.isfinite(patch.qty) or patch.qty <= 0:
+                    raise HTTPException(status_code=400, detail="数量必须为正数")
+                found_item["qty"] = patch.qty
+
+            if patch.expiry is not None:
+                if patch.expiry.strip() == "":
+                    found_item["expiry"] = None
+                else:
+                    parsed = _parse_iso_date(patch.expiry.strip())
+                    if parsed is None:
+                        raise HTTPException(status_code=400, detail="到期日期格式应为 YYYY-MM-DD")
+                    found_item["expiry"] = parsed.isoformat()
+                    if parsed < _dt.date.today():
+                        found_item["state"] = "discard"
+
+            return dict(found_item)
 
     @app.post("/cases/{cid}/confirm")
     def confirm(cid: str, payload: ConfirmIn):

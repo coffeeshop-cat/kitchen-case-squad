@@ -11,13 +11,13 @@
 | `docs/contracts.md` | 主契约：证物、智能体、剧本、事件、状态机 | R1 冻结 | 已建 |
 | `docs/api.md` | HTTP / SSE 接口契约 | R1 | 已建 |
 | `contracts/` | 契约的 Pydantic 实现 | R1 | 已建 |
-| `perception/` | 照片 → 证物清单、保质期规则 | R2 | 骨架 |
+| `perception/` | 照片 → 证物清单、归一化、保质期规则 | R2 | 归一化 + 30 条规则已建 |
 | `agents/` | 五角色运行器 | R2 | 骨架 |
 | `orchestrator/` | 状态机、主持人、判例检索 | R2/R3 | 骨架 |
 | `tools/` | timer / inventory / ledger | R3 | 骨架 |
 | `eval/` | 四个核心数字、三配置跑数 | R4 | 骨架 |
 | `prompts/` | 提示词版本目录 | R2 | 已建红队 v1 |
-| `data/` | 案例表、保质期表、静态价表 | R1–R3 | 表头已建 |
+| `data/` | 案例表、保质期表、静态价表 | R1–R3 | 30 条保质期 + 表头 |
 
 契约改动流程见 [docs/contracts.md](docs/contracts.md)；接口字段见 [docs/api.md](docs/api.md)。
 
